@@ -1,0 +1,32 @@
+package com.coconutz;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.coconutz.Server.ServerHandler;
+import com.newService.MyRunnableClass;
+import com.sun.net.httpserver.HttpServer;
+
+
+public class CoconutzDaemon {
+	static int port = 8000;
+
+	
+	public static void main(String[] args) throws IOException {
+		if (args.length > 1) {
+			port = Integer.parseInt(args[0]);
+		}
+		HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+		server.createContext("/echo", new ServerHandler());
+		server.start();
+        System.out.println("daemon starting on port " + port);
+        
+        CoconutzRunnableClass coconutzRun = new MyRunnableClass();
+//        captcha aaa = new test();
+//        Object obj = aaa;
+//        
+//        System.out.println(obj.getClass());
+	}
+}

@@ -1,0 +1,42 @@
+package com.coconutz.helper;
+
+import org.json.JSONException;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutCLI;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.Global;
+import com.coconutz.DriverRef.DB.CoconutDB;
+import com.coconutz.DriverRef.DB.DB;
+
+public class CoconutForm {
+	private CoconutCLI cli;
+	private volatile static CoconutForm instance = null;
+
+	protected CoconutForm(){
+		cli = new CoconutCLI("../../../index.php", "", "/coconutzAPI_helper/form");
+	}
+	
+	public static CoconutForm getInstance(){
+		if(instance == null){
+			synchronized (CoconutDB.class) {
+				if(instance == null){
+					instance = new CoconutForm();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+	
+	public Coconut form(CoconutParameter cp) {
+		if (Global.DEBUG) { Global.debugPrint( cp.toString()); }
+		try {
+			return new Coconut("String",cli.console("String", "makeform", new CoconutParameter()));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut("String",cli.console("String", "query", cp ));		
+		}
+	}	
+}

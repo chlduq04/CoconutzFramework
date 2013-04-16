@@ -1,0 +1,359 @@
+package com.coconutz.DriverRef.DB;
+
+import coconutz.ForParser.CoconutzParser;
+
+import java.io.File;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import org.json.JSONException;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzQuery;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.CoconutzDataBase;
+import com.coconutz.G;
+import com.coconutz.HelperRef.CoconutzCreateTable;
+
+import coconutz.ForParser.CoconutzAjax;
+public class CoconutzDB  extends CoconutzAjax{
+	public CoconutzQuery query = new CoconutzQuery();
+	public CoconutzCreateTable table = new CoconutzCreateTable();
+	private CoconutzCLI cli;
+	private String PackageName;
+	private String ClassName;
+	private volatile static CoconutzDB instance = null;
+			
+	protected CoconutzDB(){
+		System.out.println("CoconutzDB");
+		Hashtable<String, String> table = new Hashtable<>();
+		table.put("SelectAll", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table\",\"function\":\"from\"}]");
+		cli = new CoconutzCLI("../../../index.php", "coconutz_", "/coconutAPI_DB/DB");
+		
+		ClassName = this.getClass().getSimpleName();
+		PackageName = this.getClass().getPackage().getName();
+		File path = new File("");
+		CoconutzParser parser = new CoconutzParser();
+		if(parser.parseString(path.getAbsolutePath()+"/src/"+ClassName+".java")){
+			Enumeration<String> enumerationKey = table.keys();
+			while (enumerationKey.hasMoreElements()) {
+				String string = (String) enumerationKey.nextElement();
+				System.out.println(parser.getResult());
+				if(parser.getResult().contains(string)){
+					getAjax(string, table.get(string));
+				}
+			}
+		}
+	}
+	
+	public boolean getAjax( String file_name, CoconutzQuery query2 ){
+		startParser(file_name,PackageName, ClassName, query2.getQuery().toString());
+		return true;
+	}
+	public boolean getAjax( String file_name, String json ){
+		startParser(file_name,PackageName, ClassName, json );
+		return true;
+	}
+	public static CoconutzDB getInstance(){
+		if(instance == null){
+			synchronized (CoconutzDB.class) {
+				if(instance == null){
+					instance = new CoconutzDB();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+	public Coconut SelectAll(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut("String",cli.console("String", "query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson())));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut("String",cli.console("String", "query", cp ));		
+		}
+	}	
+	public Coconut query(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut("String",cli.console("String", "query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson())));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut("String",cli.console("String", "query", cp ));		
+		}
+	}	
+	
+
+//	/*---------------Queries---------------*/
+//	public void insert( String query ){
+//		cli.console("insert", (query) );
+//	}
+//	/** 
+//	 * coconut ci - query 
+//	 * 단 여기서는 결과를 받아오는 것은 제외한다. 
+//	 * **/
+//	/** coconut ci - simple query **/	
+//	public boolean simple_query( String query ){
+//		return (boolean) cli.console("boolean", "simple_query", (query));
+//	}
+//	
+//	/*---------------~Queries---------------*/
+//	
+//	/*---------------Generating Query Results---------------*/
+//	/**coconut ajax - result**/
+//	public ArrayList<HashMap<String, String>> result(String query){
+//		return (ArrayList<HashMap<String, String>>)cli.console("arraylist", "result", (query));
+//	}
+//	/**coconut ajax - row**/
+//	private String row(String query){
+//		return "";
+//	}
+//	/**coconut ajax - row**/
+//	private String row(String query , int line){
+//		return "";
+//	}
+//	/**coconut ajax - row array**/
+//	private String row_array(String query){
+//		return "";
+//	}
+//	/**coconut ajax - num rows**/
+//	public int num_rows(String query){
+//		return (int) cli.console("int", "num_rows", (query));
+//	}
+//	/**coconut ci - num_fields**/
+//	public int num_fields( String query ){
+//		return (int) cli.console( "int", "num_fields", (query) );
+//	}
+//	/**coconut ci - free_result**/
+//	public void free_result(){
+//		cli.winConsole( "free_result" );
+//	}
+//	/*---------------~Generating Query Results---------------*/
+//	
+//	/*---------------Query Helper Functions---------------*/
+//	/**coconut ci - insert id**/
+//	public void insert_id(){
+//		cli.winConsole("insert_id");
+//	}
+//	/**coconut ci - affected_rows**/
+//	public int affected_rows( String query ){
+//		return (int)cli.console("int", "affected_rows", (query));
+//	}
+//	/**coconut ci - count_all**/
+//	public int count_all( String table_name ){
+//		return (int)cli.console("int", "count_all", table_name);
+//	}
+//	/**coconut ci - platform**/
+//	public String platform(){
+//		return (String)cli.console("string", "platform", "");
+//	}
+//	/**coconut ci - version**/
+//	public String version(){
+//		return (String)cli.console("string", "version", "");
+//	}
+//	/**coconut ci - last_query**/
+//	public String last_query(){
+//		return (String)cli.console("string", "last_query", "");
+//	}
+//	/*---------------~Query Helper Functions---------------*/
+//	/**coconut ajax - get**/
+//	public void get(String query){}
+//	public void get( String table_name, int limit, int offset ){}
+//	public void get( String table_name, int limit){}
+//	/**coconut ajax get where**/	
+//	public void get_where(String name , String where){}
+//	
+//	/**coconut ci - update**/		
+//	public void update( String query ){
+//		cli.console("update", (query));
+//	}
+//	/**coconut ci - update_batch**/		
+//	public void update_batch( String query ){
+//		cli.console("update_batch",(query));
+//	}
+//	/**coconut ci - delete**/		
+//	public void delete( String query ){
+//		cli.console("update_batch",(query));
+//	}
+//	/**coconut ci - empty_table**/
+//	public void empty_table( String table_name ){
+//		cli.console("empty_table",table_name );
+//	}
+//	/**coconut ci - turncate**/	
+//	public void truncate(String table_name){
+//		cli.console("truncate",table_name);
+//	}
+//	/**coconut ci - turncate**/	
+//	public void trans_start(){}
+//	/**coconut ci - turncate**/	
+//	public void trans_complete(){}
+//	/**coconut ci - turncate**/	
+//	public void trans_strict( String TURE_or_FALSE ){
+//		cli.console("trans_strict",TURE_or_FALSE);
+//	}
+//	/**coconut ci - turncate**/	
+//	public void trans_off(){
+//		cli.winConsole("trans_off");
+//	}
+//	/*---------------Field Data---------------*/
+//	/**coconut ajax - list_field**/	
+//	public ArrayList<HashMap<String, String>> list_fields( String table_name ){
+//		return (ArrayList<HashMap<String, String>>)cli.console("arraylist","list_fields",table_name);
+//	}
+//	public ArrayList<HashMap<String, String>> list_fields( String table_name, String query ){
+//		return (ArrayList<HashMap<String, String>>)cli.console("arraylist","list_fields",query);
+//	}
+//	/**coconut ajax - field_exists**/	
+//	public boolean field_exists( String table_name ){
+//		return (boolean)cli.console("boolean", "field_exists", table_name);
+//	}
+	
+	
+//	public CoconutQuery query;
+//	private CoconutCLI cli;
+//
+//	private String ClassName;
+//	private String PackageName;
+//	private JavaParser parser;
+//	private String username;
+//	private String database_name;
+//	private float database_version;
+//	private String coconut_prefix;
+//	private boolean coconut_prefix_use;
+//	private Vector<String> coconut_protected_identifier;
+//	
+//	final private String url = "'http://211.189.127.244:8000/echo', ";
+//	protected CoconutDB(){
+//		query= new CoconutQuery();
+//		ClassName = this.getClass().getSimpleName(); 
+//		PackageName = this.getClass().getPackage().getName();
+//		
+//		username = "coconutz";
+//		database_name = "MY SQL";
+//		database_version = 1.0f;
+//		coconut_prefix_use = false;
+//		coconut_prefix = "";
+//		coconut_protected_identifier = new Vector<>();
+//		parser = new JavaParser();
+//		cli = new CoconutCLI("\\APM_Setup\\htdocs","coconutz_","startcodeig");		
+//	}
+//	public String query( String funcname ){
+//		Tojs(funcname, query.getQuery());
+//		return query.getQuery();
+//	}
+//	public String query( String funcname , String querys ){
+//		
+//		Tojs(funcname, querys);
+//		return querys;
+//	}
+//	public String get_Coconut_prefix() {
+//		return coconut_prefix;
+//	}
+//	public void set_Coconut_prefix( String argu ){
+//		coconut_prefix = argu;
+//	}
+//	public void set_Coconut_prefix_use() {
+//		coconut_prefix_use = true;
+//	}
+//
+//	private void Tojs( String returnFunc, String param ){
+//		if(startParser(url, PackageName, username, ClassName, returnFunc, param ))
+//			System.out.print("SUCCEESS!!");
+//		else
+//			System.out.print("FAIL!!");
+//	}
+//	/*--------------- Queries ---------------*/	
+//	/**coconut ci - dbprefix**/
+//	public void dbprefix( String argu ){
+//	}
+//	/**coconut ci - use or not use db prefix**/
+//	public void set_dbprefix( String argu ){
+//	}
+//	/**coconut ci - use protecting identifiers**/
+//	/*
+//	public boolean protected_identifiers( String argu ){
+//		if(coconut.set_protected_identifier( argu ))
+//			return true;
+//		return false;
+//	}*/
+//	//$this->db->escape_str()
+//	/**coconut ci - escaping all type**/
+//	public String escape_str( String argu ){
+//		return argu;		
+//	}
+//	/*--------------- ~Queries ---------------*/	
+//
+//	/*--------------- Generating Query Results ---------------*/
+//	/** in CoconutData.java **/
+//	/*--------------- ~Generating Query Results ---------------*/
+//	
+//	/*--------------- Query Helper Functions ---------------*/
+//	public String insert_string( String table_name, String table_argu[], String table_value[] ){
+//		String result = "INSERT INTO "+table_name+" ( ";
+//		for( int i=0 ; i < table_argu.length ; i++ ){
+//			if( i == table_argu.length )
+//				result+= table_argu[i];
+//			else
+//				result += table_argu[i] + ", ";
+//		}
+//		result += ") VALUES (";
+//		for( int i=0 ; i < table_value.length ; i++ ){
+//			if( i == table_value.length -1 )
+//				result+= table_value[i];
+//			else
+//				result += table_value[i] + ", ";
+//		}
+//		return result+");";
+//	}
+//	
+//	public String update_string(String table_name, String table_argu[], String table_value[], String where){
+//		String result = "UPDATE "+table_name+" SET ";
+//		for( int i=0; i < table_argu.length ; i++ ){
+//			if( i == table_argu.length -1 )			
+//				result += table_argu[i] + "='"+table_value[i]+"'";
+//			else
+//				result += table_argu[i] + "='"+table_value[i]+"', ";				
+//		}
+//		return result +" WHERE "+ where;
+//	}
+//	/*--------------- ~Query Helper Functions ---------------*/
+//	
+//	
+//	/*--------------- Coconutz's setting class ---------------*/
+//	/*	
+//		public boolean set_protected_identifier( String argu ){
+//			String check = argu.trim();
+//			for(String value : coconut_protected_identifier){
+//				if( value == check ){
+//					return false;
+//				}
+//			}
+//			coconut_protected_identifier.add( check );
+//			return true;
+//		}
+//		public String protecting_identifiers( String table_name, String true_or_false ){
+//			winConsole( "protect_identifier", table_name );		
+//		}
+//		public void protecting_identifiers( String table_name ){
+//			winConsole( "protect_identifier", table_name );
+//		}
+//		public String escape(){
+//			return "";
+//		}
+//		public String escape_str(){
+//			return "";
+//		}
+//		public void set(){}
+//		public int count_all_result( String argu ){
+//			int result =0;
+//			return result;
+//		}
+//		public void start_cache(){}
+//		public void stop_cache(){}
+//		public void flush_cache(){}
+//		public void field_data(  ){}
+//	*/
+}

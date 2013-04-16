@@ -1,0 +1,186 @@
+package com.coconutz.Server;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map.Entry;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.G;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+
+public class AjaxHandler {
+
+	public JSONObject getAjaxJson(HttpExchange xchg) {
+		JSONObject json = null;
+		String readLine = "";
+		
+		InputStream is = xchg.getRequestBody();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		String line = null;
+
+		try {
+			while ( (line = br.readLine()) != null) {
+				readLine += line;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			json = new JSONObject(readLine);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}		
+		return json;
+	}
+
+	public Coconut callFunction( JSONObject json ) {
+		
+		Coconut result = null;
+		
+		/*
+		 * daemon, function 등 필수요소 확인 후 처리하기
+		 */
+		
+		CoconutParameter cp = makeParameter(json);
+		
+		try {
+			for ( Entry<String, Object> entry : ServerHandler.usedClassList.entrySet() ) {
+				if ( entry.getKey().compareTo((String) json.get("service") + "." + (String) json.get("daemon")) == 0 ) {
+					System.out.println("daemon : " + entry.getKey() + " find");
+					result = invoke(entry.getValue(), (String) json.get("function"), cp );
+					break;
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public CoconutParameter makeParameter(JSONObject json)
+	{
+
+		// parameter 없을 경우
+		Object parametertest = null;
+		JSONObject parameter = null;
+		JSONArray parameterArray = null;
+		try {
+			parameter = (JSONObject) json.get("parameter");
+		} catch (JSONException e1) {
+			try {
+				parameter = new JSONObject("{\"empty\":\"empty\"}");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}				
+		} catch(Exception e){
+			try{
+				parameterArray = json.getJSONArray("parameter");
+				return new CoconutParameter(parameterArray);				
+			}
+			catch(JSONException e2){
+				
+			}
+
+		}
+		if (G.DEBUG) { G.debugPrint("parameter : " + parameter.toString()); }
+
+		return new CoconutParameter(parameter);
+	}
+	
+	/**
+	 * 특정 클래스의 내용을 invoke
+	 * 
+	 * @param obj
+	 *            Method Invoke할 오브젝트
+	 * @param methodName
+	 *            Method Name
+	 * @param object
+	 *            Parameter Object List
+	 * @return
+	 */
+	public static Coconut invoke(Object obj, String methodName, Object object) {
+		Method[] methods = obj.getClass().getMethods();
+
+		for (int i = 0; i < methods.length; i++) {
+			if (methods[i].getName().equals(methodName)) {
+				try {
+					System.out.println("function : " + methodName + " call");
+					if (methods[i].getReturnType().getName().equals("void")) {
+						methods[i].invoke(obj, object);
+					} else {
+						return (Coconut)methods[i].invoke(obj, object);
+					}
+				} catch (IllegalAccessException lae) {
+					System.out.println("LAE : " + lae.getMessage());
+				} catch (InvocationTargetException ite) {
+					System.out.println("ITE : " + ite.getMessage());
+				}
+			}
+		}
+		return null;
+	}
+	public void responseAjax(HttpExchange xchg, Coconut responseCoconut) throws IOException {
+		JSONObject responseJSON = null;
+		
+		responseJSON = responseData(responseCoconut);
+		
+
+		Headers header = xchg.getResponseHeaders();
+		header.add("Content-Type", "application/json");
+		header.set("Access-Control-Allow-Origin", "*");
+		header.set("Access-Control-Allow-Headers", "X-Requested-With");//
+		header.set("Access-Control-Allow-Methods", "POST");
+
+		
+		xchg.sendResponseHeaders(200, responseJSON.toString().length());
+		
+		OutputStream os = xchg.getResponseBody();
+		os.write(responseJSON.toString().getBytes("UTF-8"));
+		os.flush();
+		os.close();
+		xchg.close();
+		
+		System.out.println("\n-----------------------------------------------------------------------\n");
+	}
+	
+	public JSONObject responseData(Coconut coconut)
+	{
+		JSONObject retData = new JSONObject();
+
+		try {
+			switch (coconut.type())
+			{
+			case "boolean":
+				retData.put("data", (boolean) coconut.value());
+				break;
+			case "String":
+				retData.put("data", (String) coconut.value());
+				break;
+			case "int":
+				retData.put("data", (int) coconut.value());
+				break;
+			case "JSONObject":
+				retData.put("data", (JSONObject) coconut.value());
+				break;
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return retData;
+	}
+}

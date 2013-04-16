@@ -1,0 +1,16 @@
+package com.newService;
+
+import org.json.JSONException;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.DriverRef.DB.CoconutDB;
+
+public class mytest1 extends CoconutDB{
+	public mytest1(){
+		super(0);
+	}	
+	public Coconut _queryTest(CoconutParameter parameter){ 
+		return super.query(parameter);
+	}
+}

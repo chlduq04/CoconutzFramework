@@ -1,0 +1,311 @@
+package com.coconutz.HelperRef;
+
+import java.util.StringTokenizer;
+
+public class CoconutzForm {
+	private String url;
+	private StringBuffer form;
+	private String ClassName;
+	private String PackageName;
+	
+	public CoconutzForm( String url ){
+		this.url = url;
+		form = new StringBuffer();;
+		ClassName = this.getClass().getSimpleName(); 
+		PackageName = this.getClass().getPackage().getName();
+	}
+	public CoconutzForm( String url, StringBuffer form ){
+		this.url = url;
+		this.form = form;
+		ClassName = this.getClass().getSimpleName(); 
+		PackageName = this.getClass().getPackage().getName();
+	}
+	public CoconutzForm( CoconutzForm coconutform ){
+		url = coconutform.getUrl();
+		form = coconutform.getFormBuffer();
+		ClassName = this.getClass().getSimpleName(); 
+		PackageName = this.getClass().getPackage().getName();
+	}
+	public StringBuffer getFormBuffer(){
+		return form;
+	}
+	public String getUrl(){
+		return url;
+	}
+	
+	private String[] Stringtoken( String argu ){
+		StringTokenizer m = new StringTokenizer(argu, ",");
+		String value[] = new String[m.countTokens()];
+		int i=0;
+		while(m.hasMoreElements()){
+			value[i++] = m.nextToken().trim();
+		}
+		return value;
+	}	
+	private void reset(){
+		form = new StringBuffer();
+	}
+	private void appendBuffer(String argu){
+		form.append(argu);
+	}
+	
+	/*form open*/
+	public CoconutzForm div_open( String argu ){
+		return div(Stringtoken(argu));
+	}
+	public CoconutzForm div( String argu[] ){
+		for( String value : argu){
+			appendBuffer("<div>" + value + "</div>\r\n");
+		}
+		return new CoconutzForm(url, form);
+	}
+	
+	/*form open*/
+	public CoconutzForm form_open( String argu, String value ){
+		return form_open( Stringtoken(argu), Stringtoken(value) );
+	}
+	public CoconutzForm form_open( String argu[], String value[] ){
+		appendBuffer("<form method=\"post\" accept-charset=\"utf-8\" action=\""+url+"\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer(">\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open mulitipart*/
+
+	public CoconutzForm form_open_multipart( String argu, String value ){
+		return form_open_multipart(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_open_multipart( String argu[], String value[]){
+		appendBuffer("<form method=\"post\" accept-charset=\"utf-8\" action=\""+url+"\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer("enctype=\"multipart/form-data\""+">\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open password*/
+
+	public CoconutzForm form_open_password( String argu, String value ){
+		return form_open_password(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_open_password( String argu[], String value[]){
+		appendBuffer("<form method=\"post\" accept-charset=\"utf-8\" action=\""+url+"\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer("type=\"password\""+">\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open upload*/
+	public CoconutzForm form_open_upload( String argu, String value ){
+		return form_open_upload(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_open_upload( String argu[], String value[]){
+		appendBuffer("<form method=\"post\" accept-charset=\"utf-8\" action=\""+url+"\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer("type=\"file\""+">\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open textarea*/
+	public CoconutzForm form_open_textarea( String argu, String value ){
+		return form_open_textarea(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_open_textarea( String argu[], String value[]){
+		appendBuffer("<form method=\"post\" accept-charset=\"utf-8\" action=\""+url+"\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer("type=\"textarea\""+">\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open dropdown*/
+	public CoconutzForm form_open_dropdown( String name, String argu, String value, String set ){
+		return form_open_dropdown(name, Stringtoken(argu), Stringtoken(value), Stringtoken(set));
+	}
+	public CoconutzForm form_open_dropdown( String name, String argu[], String value[] ,String set[]){
+		appendBuffer("<select name = \" "+name+"\">\r\n");
+		for( int i=0 ; i < argu.length ; i++ ){
+			boolean check_set = false;
+			for( String check : set){
+				if(check.equals(argu[i])){
+					check_set = true;
+					break;
+				}
+			}
+			if(check_set)
+				appendBuffer("<option value = \""+argu[i]+"\" selected=\"selected\">"+value[i]+"</option>\r\n");								
+			else
+				appendBuffer("<option value = \""+argu[i]+"\">"+value[i]+"</option>\r\n");								
+
+		}
+		appendBuffer("</select>\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open dropdown*/
+	public CoconutzForm form_open_dropdown( String name, String argu, String value){
+		return form_open_dropdown(name, Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_open_dropdown( String name, String argu[], String value[]){
+		appendBuffer("<select name = \" "+name+"\" multiple=\"nultiple\">\r\n");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer("<option value = \""+argu[i]+"\">"+value[i]+"</option>\r\n");
+		}
+		appendBuffer("</select>\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open upload*/
+	public CoconutzForm form_fieldset( String argu ){
+		appendBuffer("<fieldset>\r\n");
+		appendBuffer("<legend>"+argu+"</legend>\r\n");
+		return new CoconutzForm( url, form );
+	}
+	public CoconutzForm form_fieldset_close(){
+		appendBuffer("</fieldset>\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open upload*/
+	public CoconutzForm form_checkbox( String argu, String value, boolean check ){
+		return form_checkbox( Stringtoken(argu), Stringtoken(value), check);
+	}
+	public CoconutzForm form_checkbox( String argu[],String value[],boolean check ){
+		appendBuffer("<input type=\"checkbox\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] +"=\"" + value[i] +"\" ");
+		}
+		if(check)
+			appendBuffer("checked = \"checked\" />\r\n");
+		else
+			appendBuffer("/>\r\n");
+		return new CoconutzForm( url, form );		
+	}
+
+	/*form open upload*/
+	public CoconutzForm form_radio( String argu,String value, boolean check  ){
+		return form_radio(Stringtoken(argu), Stringtoken(value), check );
+	}
+	public CoconutzForm form_radio( String argu[],String value[], boolean check ){
+		appendBuffer("<input type=\"radio\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] +"=\"" + value[i] +"\" ");
+		}
+		if(check)
+			appendBuffer("checked = \"checked\" />\r\n");
+		else
+			appendBuffer("/>\r\n");
+		return new CoconutzForm( url, form );		
+	}
+
+	/*form open upload*/
+	public CoconutzForm form_submit( String argu, String value ){
+		return form_submit(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_submit( String argu[], String value[]){
+		appendBuffer("<input type=\"submit\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer("/>\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open upload*/
+	public CoconutzForm form_label( String name, String argu, String value, String in ){
+		return form_label( name, Stringtoken(argu), Stringtoken(value), in );
+	}
+	public CoconutzForm form_label( String name, String argu[] ,String value[], String in){
+		appendBuffer("<label for=\""+name+"\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer(">" + in + "</label>\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open upload*/
+	public CoconutzForm form_reset( String argu, String value ){
+//		<input type="button" onclick="formReset()" value="Reset form">
+		return form_reset(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_reset( String argu[], String value[]){
+		appendBuffer("<input type=\"reset\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer("></input>");
+		return new CoconutzForm( url, form );
+	}
+
+	/*form open upload*/
+	public CoconutzForm form_button( String argu, String value, String in ){
+		return form_button(Stringtoken(argu), Stringtoken(value) ,in);
+	}
+	public CoconutzForm form_button( String argu[], String value[], String in){
+		appendBuffer("<button ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
+		}
+		appendBuffer(">"+in+"</button>\r\n");
+		return new CoconutzForm( url, form );
+	}
+	//	public String form_open( ,, ){}
+
+	public CoconutzForm setForm(){
+		appendBuffer("<form method=\"post\" accept-charset=\"utf-8\" action=\""+url+"\">\r\n");
+		return new CoconutzForm(url, form);
+	}
+
+	public void form_reset(){
+		url = "";
+		form = new StringBuffer();
+	}
+
+	public CoconutzForm form_close(){
+		appendBuffer("</form>");
+		return new CoconutzForm( url, form );
+	}
+
+	public String getForm(){
+		return form.toString();
+	}
+
+	/*set input form*/
+	public CoconutzForm form_hidden(String argu,String value){
+		return form_hidden(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_hidden(String argu[], String value[]){
+		appendBuffer("<input type=\"hidden\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] +"=\"" + value[i] +"\" ");			
+		}
+		appendBuffer("/>\r\n");
+		return new CoconutzForm( url, form );	
+	}
+
+
+	/*form_input*/
+	public CoconutzForm form_input( String argu, String value ){
+		return form_input(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzForm form_input( String argu[], String value[] ){
+		appendBuffer("<input type=\"text\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] +"=\"" + value[i] +"\" ");			
+		}
+		appendBuffer("/>\r\n");
+		return new CoconutzForm( url, form );
+	}
+
+
+}

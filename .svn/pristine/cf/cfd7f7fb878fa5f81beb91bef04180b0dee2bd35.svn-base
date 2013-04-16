@@ -1,0 +1,28 @@
+package com.newService;
+
+import org.json.JSONObject;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutCLI;
+import com.coconutz.CoconutParameter;
+import com.coconutz.helper.Captcha;
+import com.coconutz.helper.Testhelper;
+
+public class Mytest extends Testhelper {
+	public Mytest() {
+		
+	}
+	public Coconut _getTest(CoconutParameter parameter){ 
+		return super.getTest(parameter);
+	}
+	public Coconut _setTest(CoconutParameter parameter){ 
+		return super.setTest(parameter);
+	}
+	public Coconut useCaptcha(CoconutParameter cp){
+		Captcha captcha = Captcha.getInstance();
+		Coconut coconut1 = captcha.getCaptcha(cp);
+		Coconut coconut2 = captcha.getFormCaptcha(cp);
+		//coconut1.append(coconut2);
+		return coconut1;
+	}
+}

@@ -1,0 +1,31 @@
+package com.newService;
+
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.DriverRef.DB.CoconutDB;
+import com.coconutz.helper.Captcha;
+import com.coconutz.helper.CoconutForm;
+import com.coconutz.helper.Date;
+
+public class MyRunnableClass extends CoconutzRunnableClass {
+	
+	public MyRunnableClass() {
+		defaultClass();
+		userClass();
+	}
+
+	private void defaultClass() {
+		Captcha captcha = Captcha.getInstance();
+		Date date= Date.getInstance();	
+		CoconutDB db = CoconutDB.getInstance();
+		CoconutForm form = CoconutForm.getInstance();
+	}
+	
+	private void userClass() {
+		addRunnableClass( new Mytest() );
+		addRunnableClass( new mytest4() );
+//		addRunnableClass( new mytest3() );
+		
+//		addRunnableClass(new Object1);
+//		addRunnableClass(new Object2);
+	}
+}

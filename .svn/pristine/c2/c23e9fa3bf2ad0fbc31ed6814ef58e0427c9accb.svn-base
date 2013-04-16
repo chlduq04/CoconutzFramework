@@ -1,0 +1,319 @@
+package com.coconutz.helper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.coconutz.CoconutCLI;
+import com.coconutz.CoconutParameter;
+import com.coconutz.DriverRef.DB.DB;
+
+public class CreateTable {
+	private CoconutCLI cli = new CoconutCLI("../../../index.php", "coconutz_", "/coconutAPI_DB/DB");
+	boolean option = false;
+	private String query;
+	public CreateTable(){
+		query = "";
+	}
+	public CreateTable( CreateTable table ){
+		query = table.query();
+	}
+	public CreateTable( String query , boolean option){
+		this.option = option;
+		this.query = query;
+	}
+	public CreateTable( String query ){
+		this.option = false;
+		this.query = query;
+	}
+	public String query(){
+		return query;
+	}
+	public CoconutCLI getCli(){
+		return cli;
+	}
+	public CreateTable table_start( String name ){
+		query += "CREATE TABLE "+name + "( ";
+		return new CreateTable(query);
+	}
+	public CreateTable table_name( String name ){
+		query += "CREATE TABLE "+name + "( ";
+		return new CreateTable(query);
+	}
+	public CreateTable table_end(){
+		return table_end("");
+		
+	}
+	public CreateTable table_end( String option ){
+		query = query.substring(0,query.length()-2);
+		query += ")" + option + ";";
+		System.out.println(query);		
+		try {
+			cli.console("query", new CoconutParameter(new DB(query).getJson()));
+		} catch (JSONException e) {
+			System.out.println("Error!!!");
+			e.printStackTrace();
+		}
+		return new CreateTable(query);
+	}
+	public CreateTable table_column( String name, String type, String option ){		
+		query += name + " " + type + " " +option +", ";
+		return new CreateTable(query);
+	}
+	public CreateTable AUTO_INCREMENT(){
+		if(option){
+			query = query.substring(0,query.length()-2);
+			query += "AUTO_INCREMENT, ";
+		}
+		return new CreateTable(query); 		
+	}
+	public CreateTable UNSIGNED(){
+		if(option){
+			query = query.substring(0,query.length()-2);
+			query += "UNSIGNED, ";
+		}
+		return new CreateTable(query); 		
+	}
+	public CreateTable ZEROFILL(){
+		if(option){
+			query = query.substring(0,query.length()-2);
+			query += "ZEROFILL, ";
+		}
+		return new CreateTable(query); 		
+	}
+	public CreateTable SERIAL_DEFAULT_VALUE(){
+		if(option){
+			query = query.substring(0,query.length()-2);
+			query += "SERIAL DEFAULT VALUE, ";
+		}
+		return new CreateTable(query); 		
+	}
+	public CreateTable CHARACTER_SET(){
+		if(option){
+			query = query.substring(0,query.length()-2);
+			query += "CHARACTER SET, ";
+		}
+		return new CreateTable(query); 		
+	}
+	public CreateTable BINARY(){
+		if(option){
+			query = query.substring(0,query.length()-2);
+			query += "BINARY, ";
+		}
+		return new CreateTable(query); 		
+	}
+
+
+	public CreateTable TINYINT( String name, int M ){ 
+		query += name +" TINYINT(" + M + "), ";
+		return new CreateTable(query,true); 
+	};
+	//	AUTO_INCREMENT
+	//	UNSIGNED, ZEROFILL,
+	//	SERIAL DEFAULT VALUE
+	//	[0 if NOT NULL]
+
+	public CreateTable SMALLINT( String name, int M ){
+		query += name +" SMALLINT(" + M + "), ";
+		return new CreateTable(query,true); 
+	};
+	//	AUTO_INCREMENT,
+	//	UNSIGNED, ZEROFILL,
+	//	SERIAL DEFAULT VALUE
+	//	[0 if NOT NULL]
+
+	public CreateTable MEDIUMINT( String name, int M ){
+		query += name +" MEDIUMINT(" + M + "), ";
+		return new CreateTable(query,true); 
+	}
+	//	AUTO_INCREMENT,
+	//	UNSIGNED, ZEROFILL,
+	//	SERIAL DEFAULT VALUE
+	//	[0 if NOT NULL]
+
+	public CreateTable INT( String name, int M ){
+		query += name +" INT(" + M + "), ";
+		return new CreateTable(query,true); 
+	}
+	//	AUTO_INCREMENT,
+	//	UNSIGNED, ZEROFILL,
+	//	SERIAL DEFAULT VALUE
+	//	[0 if NOT NULL]
+
+	public CreateTable BIGINT( String name, int M ){
+		query += name +" BIGINT(" + M + "), ";
+		return new CreateTable(query,true); 
+	}
+	//	AUTO_INCREMENT,
+	//	UNSIGNED, ZEROFILL,
+	//	SERIAL DEFAULT VALUE
+	//	[0 if NOT NULL]
+
+	public CreateTable FLOAT( String name, float M ){
+		query += name +"  FLOAT(" + M + "), ";
+		return new CreateTable(query,true); 
+	}	
+	//	UNSIGNED, ZEROFILL
+	//	[0 if NOT NULL]
+	//
+	public CreateTable FLOAT( String name, int M, int D ){
+		query += name +" FLOAT(" + M +", " + D + "), ";
+		return new CreateTable(query,true); 
+	}
+	//	UNSIGNED, ZEROFILL
+	//	[0 if NOT NULL]
+	//
+	public CreateTable DOUBLE( String name, int M, int D ){
+		query += name +" DOUBLE(" + M +", " + D + "), ";
+		return new CreateTable(query,true); 
+	}
+	//	UNSIGNED, ZEROFILL
+	//	[0 if NOT NULL]
+	//
+	public CreateTable DECIMAL( String name, int M, int D){
+		query += name +" DECIMAL(" + M +", " + D + "), ";
+		return new CreateTable(query,true); 
+	}
+	//	UNSIGNED, ZEROFILL
+	//	[0 if NOT NULL]
+	//	
+	public CreateTable BIT( String name, int M ){
+		query += name +" BIT(" + M + "), ";
+		return new CreateTable(query,true); 
+	}
+	//	Prior to 5.03
+	//	TINYINT(1) Synonym
+	//	[0 if NOT NULL]
+	//
+	public CreateTable CHAR( String name, int M ){
+		query += name +" CHAR(" + M+ "), ";
+		return new CreateTable(query,true); 
+	}
+	//	BINARY, CHARACTER SET	
+	//	["" if NOT NULL]
+	//
+	public CreateTable VARCHAR( String name, int M ){
+		query += name +" VARCHAR(" + M + "), ";
+		return new CreateTable(query,true); 
+	}	
+	//	BINARY, CHARACTER SET	
+	//	["" if NOT NULL]
+	//
+	public CreateTable TINYTEXT2( String name ){
+		query += name +" TINYTEXT2, ";
+		return new CreateTable(query,true); 
+	}	
+	//	BINARY, CHARACTER SET	
+	//	["" if NOT NULL]
+	//	
+	public CreateTable TEXT2( String name ){
+		query += name +" TEXT2, ";
+		return new CreateTable(query,true); 
+	}	
+	//	BINARY, CHARACTER SET	
+	//	["" if NOT NULL]
+	//	
+	public CreateTable MEDIUMTEXT2( String name ){
+		query += name +" MEDIUMTEXT2, ";
+		return new CreateTable(query,true); 
+	}	
+	//	BINARY, CHARACTER SET	
+	//	["" if NOT NULL]
+	//	
+	public CreateTable LONGTEXT2( String name ){
+		query += name +" LONGTEXT2, ";
+		return new CreateTable(query,true); 
+	}	
+	//	BINARY, CHARACTER SET	
+	//	["" if NOT NULL]
+	//	
+	public CreateTable BINARY(  String name, int M ){
+		query += name +" BINARY(" + M + "), ";
+		return new CreateTable(query,true); 
+	}	
+	//	Global Only
+	//	["" if NOT NULL]
+	//	
+	public CreateTable VARBINARY(  String name, int M ){
+		query += name +" VARBINARY(" + M + "), ";
+		return new CreateTable(query,true); 
+	}	
+	//	Global Only
+	//	["" if NOT NULL]
+	//	
+	public CreateTable TINYBLOB( String name ){
+		query += name +" TINYBLOB, ";
+		return new CreateTable(query,true); 
+	}
+	//	Global Only
+	//	["" if NOT NULL]
+	//	
+	public CreateTable BLOB( String name ){
+		query += name +" BLOB, ";
+		return new CreateTable(query,true); 
+	}
+	//	Global Only
+	//	["" if NOT NULL]
+	//	
+	public CreateTable MEDIUMBLOB( String name ){
+		query += name +" MEDIUMBLOB, ";
+		return new CreateTable(query,true); 
+	}	
+	//	Global Only
+	//	["" if NOT NULL]
+	//	
+	public CreateTable LONGBLOB( String name ){
+		query += name +" LONGBLOB, ";
+		return new CreateTable(query,true); 
+	}
+	//	Global Only
+	//	["" if NOT NULL]
+	//	
+	public CreateTable ENUM2( String name ){
+		query += name +" ENUM2, ";
+		return new CreateTable(query,true); 
+	}
+	//	CHARACTER SET	 
+	//  [1st value if NOT NULL]
+	public CreateTable SET2( String name ){
+		query += name +" SET2, ";
+		return new CreateTable(query,true); 
+	}
+	//	CHARACTER SET	
+	//	["" if NOT NULL]
+	//	
+	public CreateTable DATE( String name ){
+		query += name +" DATE, ";
+		return new CreateTable(query,true); 
+	}
+	//	Global Only
+	//	["0000-00-00" if NOT NULL]
+	//	
+	public CreateTable DATETIME( String name ){
+		query += name +" DATETIME, ";
+		return new CreateTable(query,true); 
+	}	
+	//	Global Only
+	//	["0000-00-00 00:00:00" if NOT NULL]
+	//	
+	public CreateTable TIME( String name ){
+		query += name +" TIME, ";
+		return new CreateTable(query,true); 
+	}
+	//	Global Only
+	//	["00:00:00" if NOT NULL]
+	//	
+	public CreateTable TIMESTAMP( String name ){
+		query += " TIMESTAMP, ";
+		return new CreateTable(query,true); 
+	}	
+	//	Global Only
+	//	Current Date & Time
+	//
+	public CreateTable YEAR( String name ){
+		query += " YEAR, ";
+		return new CreateTable(query,true); 
+	}
+	//	Global Only
+	//	["0000" if NOT NULL]\
+}
+

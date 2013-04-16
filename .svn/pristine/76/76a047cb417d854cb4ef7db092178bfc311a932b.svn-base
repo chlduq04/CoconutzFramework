@@ -1,0 +1,20 @@
+package coconutz.ForParser;
+import java.util.Hashtable;
+
+
+
+public class Parser {
+	FuncParser parser = new FuncParser();
+	public boolean parseString(String file){
+		try {
+			return new Read().ReadLine(parser,file);
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;			
+		}
+	}
+	public Hashtable<String, String> getResult(){
+		return parser.getFuncInfo();
+	}
+
+}

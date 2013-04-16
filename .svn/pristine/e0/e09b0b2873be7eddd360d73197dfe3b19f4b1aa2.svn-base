@@ -1,0 +1,17 @@
+package com.coconutz;
+
+public class Global {
+	/*
+		if (Global.DEBUG) { Global.debugPrint(""); }
+	 */
+	/*
+	 * Global.DEBUG("");
+	 */
+	final public static boolean DEBUG = true;
+	public static void debugPrint(String str){
+		System.out.println(str);
+	}
+	public static void DEBUG(String str) {
+		if (Global.DEBUG) { System.out.println(str); }
+	}
+}

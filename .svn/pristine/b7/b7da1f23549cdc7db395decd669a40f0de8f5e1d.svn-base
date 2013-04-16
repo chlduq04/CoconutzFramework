@@ -1,0 +1,61 @@
+package com.coconutz;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+
+import org.json.JSONObject;
+
+
+public class ExcutePHP {
+	private volatile static ExcutePHP instance = null;
+	
+	private ExcutePHP(){
+	}
+	
+	public static ExcutePHP getInstance() {
+		if (instance == null) {
+			synchronized(ExcutePHP.class){
+				if (instance == null) {
+					instance = new ExcutePHP();
+				}
+			}
+		}
+		return instance;
+	}
+
+	public String excute(String url, JSONObject parameter){
+		String result = "";
+		String execStr = "php ../../../index.php" + " " + url + " ";
+		String urlEncode = parameter.toString();
+		try {
+			urlEncode = java.net.URLEncoder.encode(urlEncode, "UTF-8").replaceAll("\\+", "%20").replaceAll("\\*", "%2A");
+//			System.out.println("encode : "+execStr);	//java.net.URLDecoder.decode(execStr, "UTF-8")
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		execStr = execStr + urlEncode;
+		
+		
+		Process process;
+		try {
+			process = Runtime.getRuntime().exec(execStr);
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String line = null;
+			while( (line = br.readLine()) != null ) {
+			    //System.out.println(line);
+			    result = result + line;
+			}
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return result;
+	}
+	
+}

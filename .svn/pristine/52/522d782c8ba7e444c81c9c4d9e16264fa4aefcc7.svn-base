@@ -1,0 +1,119 @@
+package com.coconutz.helper;
+
+import java.util.HashMap;
+
+import com.coconutz.CoconutCLI;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.ExcutePHP;
+import com.coconutz.Global;
+
+public class Date {
+	private CoconutCLI cli;
+	private volatile static Date instance = null;
+
+	ExcutePHP excutePHP = ExcutePHP.getInstance();HashMap<String, String> list;
+	
+	
+	private Date(){
+		cli = new CoconutCLI("../../../index.php", "", "/coconutzAPI_helper/date");
+	}
+	
+	public static Date getInstance() {
+		if (instance == null) {
+			synchronized(Date.class){
+				if (instance == null) {
+					instance = new Date();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+	
+	
+	
+	
+	public int getNow(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getNow\t"+ parameter.toString()); }		
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getNow", parameter);
+		return (int)cli.console("string", "getNow", parameter);
+	}
+	
+	public String getMdate(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getMdate\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getMdate", parameter);
+		return (String)cli.console("string", "getMdate", parameter);
+	}
+	
+	public String getStandardDate(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getStandardDate\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getStandardDate", parameter);
+		return (String)cli.console("string", "getStandardDate", parameter);
+	}
+	
+	public String getLocalToGMT(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getLocalToGMT\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getLocalToGMT", parameter);
+		return (String)cli.console("string", "getLocalToGMT", parameter);
+	}
+	
+	public String getGMTToLocal(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getGMTToLocal\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getGMTToLocal", parameter);
+		return (String)cli.console("string", "getGMTToLocal", parameter);
+	}
+	
+	public String getMysqlToUnix(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getMysqlToUnix\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getMysqlToUnix", parameter);
+		return (String)cli.console("string", "getMysqlToUnix", parameter);
+	}
+	
+	public String getUnixToHuman(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getUnixToHuman\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getUnixToHuman", parameter);
+		return (String)cli.console("string", "getUnixToHuman", parameter);
+	}
+	
+	public String getHumanToUnix(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getHumanToUnix\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getHumanToUnix", parameter);
+		return (String)cli.console("string", "getHumanToUnix", parameter);
+	}
+	
+	public String getTimespan(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getTimespan\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getTimespan", parameter);
+		return (String)cli.console("string", "getTimespan", parameter);
+	}
+	
+	public String getDaysInMonth(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getDaysInMonth\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getDaysInMonth", parameter);
+		return (String)cli.console("string", "getDaysInMonth", parameter);
+	}
+	
+	public String getTimezones(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getTimezones\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getTimezones", parameter);
+		return (String)cli.console("string", "getTimezones", parameter);
+	}
+	
+	public String getTimezoneMenu(CoconutParameter parameter)
+	{
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/date/getTimezoneMenu\t"+ parameter.toString()); }
+		return (String)cli.console("string", "getTimezoneMenu", parameter);
+	}
+}

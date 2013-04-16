@@ -1,0 +1,18 @@
+package com.newService;
+
+import org.json.JSONException;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.DriverRef.DB.CoconutDB;
+
+public class mytest4 extends CoconutDB{
+	public mytest4() {
+		table.table_start("table2").INT("type", 5).VARCHAR("name", 20).table_end();
+		query.select("name").from("table1").where("id", "3");
+		getAjax("testajax", query);
+	}
+	public Coconut _query(CoconutParameter parameter){ 		
+		return super.query(parameter);
+	}
+}

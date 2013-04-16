@@ -1,0 +1,23 @@
+package com.coconutz.HelperRef;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.G;
+
+public class CoconutzTesthelper {
+	private CoconutzCLI cli;
+	
+	public CoconutzTesthelper() {
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/testhelper");
+	}
+
+	public Coconut getTest(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/testhelper/getTest\t"+ parameter.getEncodingParam()); }		
+		return new Coconut("String",cli.console("String", "getTest", parameter));
+	}
+	public Coconut setTest(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/testhelper/setTest\t"+ parameter.getEncodingParam()); }		
+		return new Coconut("String",cli.console("String", "setTest", parameter));
+	}
+}

@@ -1,0 +1,23 @@
+package com.newService;
+
+import org.json.JSONException;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.DriverRef.DB.CoconutzDB;
+import com.sun.xml.internal.ws.wsdl.writer.document.ParamType;
+
+public class mytest4 extends CoconutzDB{
+	public mytest4() {
+//		table.table_start("table2").INT("type", 5).VARCHAR("name", 20).table_end();
+		getAjax("_query",query.select("name").from("table1").where("id", "3"));
+	}
+	
+	public Coconut _query(CoconutParameter parameter){
+		return super.query(parameter);
+	}
+	public Coconut _testQuery(CoconutParameter parameter){
+		return super.Select(parameter);
+	}	
+}
+//OrderBy, Like, Where, Join, SelectMin, SelectMax,Select

@@ -1,0 +1,41 @@
+package com.coconutz.helper;
+
+import org.json.JSONObject;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.ExcutePHP;
+import com.coconutz.Global;
+import com.coconutz.CoconutCLI;
+
+public class Captcha {
+	private CoconutCLI cli;
+	private volatile static Captcha instance = null;
+	
+	private Captcha(){
+		cli = new CoconutCLI("../../../index.php", "", "/coconutzAPI_helper/capcha");
+	}
+	
+	public static Captcha getInstance() {
+		if (instance == null) {
+			synchronized(Captcha.class){
+				if (instance == null) {
+					instance = new Captcha();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+
+	public Coconut getCaptcha(CoconutParameter cp){ 
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/captcha/getCaptcha\t"+ cp.toString()); }
+		return new Coconut("String",cli.console("String", "getCaptcha", cp));
+	}
+	
+	public Coconut getFormCaptcha(CoconutParameter cp){ 
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/captcha/getFormCaptcha\t"+ cp.toString()); }		
+		return new Coconut("String",cli.console("String", "getFormCaptcha", cp));
+	}
+}

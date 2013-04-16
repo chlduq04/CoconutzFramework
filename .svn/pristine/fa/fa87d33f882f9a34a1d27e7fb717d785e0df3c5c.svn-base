@@ -1,0 +1,16 @@
+package com.newService;
+
+import org.json.JSONException;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.helper.CoconutForm;
+
+public class mytest3 extends CoconutForm{
+	public mytest3(){
+		super();
+	}
+	public Coconut _formTest(CoconutParameter parameter){
+		return super.form(parameter);
+	}
+}

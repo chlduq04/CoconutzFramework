@@ -1,0 +1,26 @@
+package com.coconutz.helper;
+
+import org.json.JSONObject;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutCLI;
+import com.coconutz.CoconutParameter;
+import com.coconutz.ExcutePHP;
+import com.coconutz.Global;
+
+public class Testhelper {
+	private CoconutCLI cli;
+	
+	public Testhelper() {
+		cli = new CoconutCLI("../../../index.php", "", "/coconutzAPI_helper/testhelper");
+	}
+
+	public Coconut getTest(CoconutParameter parameter){
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/testhelper/getTest\t"+ parameter.getEncodingParam()); }		
+		return new Coconut("String",cli.console("String", "getTest", parameter));
+	}
+	public Coconut setTest(CoconutParameter parameter){ 
+		if (Global.DEBUG) { Global.debugPrint("/coconutzAPI_helper/testhelper/setTest\t"+ parameter.getEncodingParam()); }		
+		return new Coconut("String",cli.console("String", "setTest", parameter));
+	}
+}
