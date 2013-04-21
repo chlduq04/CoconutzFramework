@@ -13,7 +13,7 @@ public class CoconutzFuncInfo {
 		childMethod = argu;
 	}
 	public void FuncParam(String argu){
-		parentMethod = argu;
+		parentMethod = argu; 
 		funcName.put(childMethod, parentMethod);
 	}
 	public Hashtable<String, String> getFuncInfo(){

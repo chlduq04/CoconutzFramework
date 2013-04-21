@@ -1,8 +1,6 @@
 package coconutz.ForParser;
 import java.util.Hashtable;
 
-
-
 public class CoconutzParser {
 	CoconutzFuncInfo parser = new CoconutzFuncInfo();
 	public boolean parseString(String file){

@@ -23,4 +23,12 @@ public class FormTest {
 		return coconut;
 	}
 	
+	public Coconut _getTime(CoconutParameter parameter){
+		HelloJar helloJar = new HelloJar();
+		
+		Coconut<String> coconut = new Coconut<String>( "Long", helloJar.Time() );
+
+		return coconut;
+
+	}
 }

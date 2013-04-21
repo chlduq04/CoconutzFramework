@@ -1,20 +1,17 @@
 package com.coconutz.HelperRef;
 
-import coconutz.ForParser.CoconutzAjax;
-
 import com.coconutz.Coconut;
 import com.coconutz.CoconutParameter;
 import com.coconutz.CoconutzCLI;
-import com.coconutz.CoconutzQuery;
 import com.coconutz.CoconutzRunnableClass;
 import com.coconutz.G;
 
-public class CoconutzCaptcha extends CoconutzAjax{
+public class CoconutzCaptcha {
 	private CoconutzCLI cli;
 	private volatile static CoconutzCaptcha instance = null;
 	
 	private CoconutzCaptcha(){
-		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/captcha");
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/capcha");
 	}
 	
 	public static CoconutzCaptcha getInstance() {
@@ -25,7 +22,6 @@ public class CoconutzCaptcha extends CoconutzAjax{
 					CoconutzRunnableClass.addRunnableClass(getInstance(), "CaptchaHelper");
 				}
 			}
-			
 		}
 		return instance;
 	}
@@ -39,5 +35,4 @@ public class CoconutzCaptcha extends CoconutzAjax{
 		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/captcha/getFormCaptcha\t"+ cp.toString()); }		
 		return new Coconut("String",cli.console("String", "getFormCaptcha", cp));
 	}
-
 }

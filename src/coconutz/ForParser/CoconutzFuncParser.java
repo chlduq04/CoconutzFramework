@@ -3,7 +3,6 @@ package coconutz.ForParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.StringTokenizer;
 public class CoconutzFuncParser {
 	public boolean ReadLine(CoconutzFuncInfo parser, String args)
@@ -39,6 +38,9 @@ public class CoconutzFuncParser {
 						}
 						funcParam = funcParam.trim();
 //						System.out.println("func param : "+funcParam.trim());
+						func = false;
+					}
+					else if(s.matches(".*public.*")){
 						func = false;
 					}
 					parser.FuncParam(funcParam);

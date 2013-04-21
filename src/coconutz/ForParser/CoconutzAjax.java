@@ -68,7 +68,7 @@ public class CoconutzAjax extends CoconutzSetting{
 					+"alert('Error');\r\n"
 					+"},\r\n" 
 					+"complete : poll,\r\n" 
-					+"timeout : 70000\r\n" 
+					+"timeout : 50000\r\n" 
 					+"});\r\n" 
 					+"})();\r\n" 
 					+"</script>" 

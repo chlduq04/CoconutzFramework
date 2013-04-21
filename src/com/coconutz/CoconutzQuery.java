@@ -8,12 +8,27 @@ import org.json.JSONObject;
 
 public class CoconutzQuery{
 	protected JSONArray query;
+	private volatile static CoconutzQuery instance = null;
 
 	public CoconutzQuery(){
 		query = new JSONArray();
 	}
 	public CoconutzQuery(JSONArray query){
 		this.query  = query;
+	}
+	public void setQuery(JSONArray query){
+		this.query = query;
+	}
+	public static CoconutzQuery getInstance( JSONArray query ) {
+		if (instance == null) {
+			synchronized(CoconutzQuery.class){
+				if (instance == null) {
+					instance = new CoconutzQuery();
+				}
+			}
+		}
+		instance.setQuery(query);
+		return instance;
 	}
 	public JSONArray getQuery(){
 		JSONArray result = query;
@@ -42,15 +57,16 @@ public class CoconutzQuery{
 		}
 		return value;
 	}	
+	
 	private CoconutzQuery superQuery( String key, String argu ) {
 		JSONObject result;
 		try {
 			result = new JSONObject("{\"function\":\""+key+"\",\"param1\":\""+argu+"\"}");
 			query.put(result);
 		} catch (JSONException e) {
-			
+			e.printStackTrace();			
 		}
-		return new CoconutzQuery(query);
+		return getInstance(query);
 	}
 	private CoconutzQuery superQuery( String key, String argu1,String argu2 ) {
 		JSONObject result;
@@ -60,7 +76,7 @@ public class CoconutzQuery{
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return new CoconutzQuery(query);
+		return getInstance(query);
 	}
 	private CoconutzQuery superQuery( String key, String argu1,String argu2,String argu3 ) {
 		JSONObject result;
@@ -70,7 +86,7 @@ public class CoconutzQuery{
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return new CoconutzQuery(query);
+		return getInstance(query);
 	}
 	
 	/*--select--*/

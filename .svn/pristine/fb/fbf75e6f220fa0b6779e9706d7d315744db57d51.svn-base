@@ -8,17 +8,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import sun.org.mozilla.javascript.internal.json.JsonParser;
+
 import com.coconutz.Coconut;
 import com.coconutz.CoconutParameter;
 import com.coconutz.G;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+
 
 public class ServerHandler implements HttpHandler {
 
@@ -80,8 +85,9 @@ public class ServerHandler implements HttpHandler {
 			
 			responseCoconut = callFunction(requestJson);
 			if (G.DEBUG) { G.debugPrint("call Function return String : " + responseCoconut.getString()); }
-
-			formHandler.responseForm(xchg, responseCoconut, boundary_str);
+						
+			
+			//responseForm(xchg, responseCoconut, boundary_str);
 		}
 		
 		/*if ( returnStr == null ) {
@@ -102,7 +108,7 @@ public class ServerHandler implements HttpHandler {
 		 */
 		
 		CoconutParameter cp = makeParameter(json);
-		if (G.DEBUG) { G.debugPrint(cp.toString()); }
+
 		try {
 			for ( Entry<String, Object> entry : ServerHandler.usedClassList.entrySet() ) {
 					if ( entry.getKey().compareTo( (String) json.get("service") ) == 0 ) {

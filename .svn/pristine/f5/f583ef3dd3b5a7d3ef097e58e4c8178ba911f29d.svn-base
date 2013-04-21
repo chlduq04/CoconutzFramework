@@ -66,9 +66,5 @@ public class CoconutParameter {
 		}
 	}
 	
-	public String getString() {
-		return jsonObject.toString() + jsonArray.toString();
-	}
-	
 	/*----------------------- coconutDB -----------------------*/
 }

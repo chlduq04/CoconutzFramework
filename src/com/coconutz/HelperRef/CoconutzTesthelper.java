@@ -18,14 +18,18 @@ public class CoconutzTesthelper extends CoconutzAjax{
 	private CoconutzCLI cli;
 	private String PackageName;
 	private String ClassName;
+	private CoconutzCaptcha Captcha;
+	private CoconutzTable Table;
 	
 	public CoconutzTesthelper() {
 		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/testhelper");
 		ClassName = this.getClass().getSimpleName();
 		PackageName = this.getClass().getPackage().getName();
-
 		Hashtable<String, String> table = new Hashtable<>();
-	//	table.put("SelectAll", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table\",\"function\":\"from\"}]");
+		//	table.put("SelectAll", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table\",\"function\":\"from\"}]");
+		//	table.put("SelectAll", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table\",\"function\":\"from\"}]");
+		//	table.put("SelectAll", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table\",\"function\":\"from\"}]");
+		//	table.put("SelectAll", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table\",\"function\":\"from\"}]");
 		File path = new File("");		
 		CoconutzParser parser = new CoconutzParser();
 
@@ -39,6 +43,7 @@ public class CoconutzTesthelper extends CoconutzAjax{
 			}
 		}
 	}
+	
 	private boolean getAjax( String file_name, CoconutzQuery query2 ){
 		startParser(file_name,PackageName, ClassName, query2.getQuery().toString());
 		return true;

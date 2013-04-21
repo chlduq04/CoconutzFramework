@@ -32,6 +32,7 @@ public class CoconutzDB  extends CoconutzAjax{
 		PackageName = this.getClass().getPackage().getName();
 
 		Hashtable<String, String> table = new Hashtable<>();
+		table.put("","[]");
 		table.put( "Select", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table\",\"function\":\"from\"}]" );
 		table.put( "SelectMax", "[{\"param1\":\"*\",\"function\":\"select_max\"},{\"param1\":\"table\",\"function\":\"from\"}]" );
 		table.put( "SelectMin", "[{\"param1\":\"*\",\"function\":\"select_min\"},{\"param1\":\"table\",\"function\":\"from\"}]" );

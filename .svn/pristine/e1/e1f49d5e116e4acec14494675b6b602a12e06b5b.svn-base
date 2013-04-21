@@ -2,7 +2,7 @@ package com.coconutz;
 
 public class G {
 	/*
-		if (G.DEBUG) { G.debugPrint(""); }
+		if (G.DEBUG) { Global.debugPrint(""); }
 	 */
 	/*
 	 * G.DEBUG("");
