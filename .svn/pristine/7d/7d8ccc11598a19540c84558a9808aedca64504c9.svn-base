@@ -1,0 +1,58 @@
+package com.coconutz.HelperRef;
+
+import org.json.JSONException;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzDataBase;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+
+public class CoconutzTable {
+	private CoconutzCLI cli;
+	private volatile static CoconutzTable instance = null;
+
+	
+	public CoconutzTable(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_Class/HTMLTable");
+	}	
+
+	public static CoconutzTable getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzDate.class){
+				if (instance == null) {
+					instance = new CoconutzTable();
+					CoconutzRunnableClass.addRunnableClass(getInstance(), "TableHelper");
+				}
+			}
+		}
+		return instance;
+	}
+	public Coconut getTest(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }	
+		return new Coconut("String",cli.console("String", "generateTest", parameter));
+	}
+	public Coconut getTableFromDB(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }		
+		try {
+			return new Coconut("String",cli.console("String", "generateFromDB", new CoconutParameter(new CoconutzDataBase(parameter.getJsonArray()).getJson())));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut("String",cli.console("String", "generateFromDB", parameter ));		
+		}
+	}	
+	public Coconut Insert(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }
+		try {
+			return new Coconut("String",cli.console("String", "insertTable", new CoconutParameter(new CoconutzDataBase(parameter.getJsonArray()).getJson())));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut("String",cli.console("String", "insertTable", parameter));		
+		}
+	}
+	public Coconut Delete(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }
+		return new Coconut("String",cli.console("String", "deleteTable", parameter));		
+	}
+}

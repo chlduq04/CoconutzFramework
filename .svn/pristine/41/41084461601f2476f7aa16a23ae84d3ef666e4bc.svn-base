@@ -1,0 +1,79 @@
+package coconutz.ForParser;
+
+public class CoconutzMakeAjax{
+	private StringBuffer ajax;
+	private StringBuffer type;
+	private StringBuffer url;
+	private StringBuffer cache;
+	private StringBuffer dataType;
+	private StringBuffer data;
+	private StringBuffer success;
+	private StringBuffer error;	
+	
+	public CoconutzMakeAjax(){
+		ajax = new StringBuffer();
+		type = new StringBuffer("type : ");
+		url = new StringBuffer();
+		cache = new StringBuffer();
+		dataType = new StringBuffer();
+		data = new StringBuffer();
+		success = new StringBuffer();
+		error = new StringBuffer();
+	}
+	private String SCRIPT_MAKE(){
+		ajax.append("$.ajax({\r\n");
+		ajax.append(type);
+		ajax.append(url);
+		ajax.append(cache);
+		ajax.append(dataType);
+		ajax.append(data);
+		ajax.append(success);
+		ajax.append(error);
+		ajax.append("});\r\n");
+		return ajax.toString();
+	}
+	
+	
+	
+	public CoconutzMakeAjax SCRIPT_INCLUDE(String path){
+		ajax.append("<script src=\""+path+"\"></script>\r\n");		
+		return this;
+	}
+	public CoconutzMakeAjax SCRIPT_START(){
+		ajax.append("<script>\r\n");
+		return this;
+	}
+	public CoconutzMakeAjax TYPE(String argu){
+		type = new StringBuffer("type : " + argu + ",\r\n");
+		return this;
+	}
+	public CoconutzMakeAjax URL(String argu){
+		url = new StringBuffer("url : " + argu + ",\r\n");
+		return this;
+	}
+	public CoconutzMakeAjax CACHE(String argu){
+		cache = new StringBuffer("cache : " + argu + ",\r\n");
+		return this;
+	}
+	public CoconutzMakeAjax DATATYPE(String argu){
+		dataType = new StringBuffer("dataType : " + argu + ",\r\n");
+		return this;
+	}
+	public CoconutzMakeAjax DATA(String argu){
+		data = new StringBuffer("data : " + argu + ",\r\n");
+		return this;
+	}
+	public CoconutzMakeAjax SUCCESS(String parameter, String argu){
+		success = new StringBuffer("success : function("+parameter+"){" + argu + "},\r\n");
+		return this;
+	}
+	public CoconutzMakeAjax ERROR(String parameter, String argu){
+		error = new StringBuffer("error : function("+parameter+"){" + argu + "},\r\n");
+		return this;
+	}
+	public CoconutzMakeAjax SCRIPT_END(){
+		ajax.append("</script>\r\n");
+		return this;	
+	}
+	
+}

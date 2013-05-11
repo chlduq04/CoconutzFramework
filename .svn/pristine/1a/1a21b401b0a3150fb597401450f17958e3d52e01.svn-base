@@ -1,0 +1,386 @@
+package coconutz.ForParser;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+public class CoconutzAjax extends CoconutzSetting{
+	private String url = super.url;
+	private String username = super.username;
+
+	private boolean getJQuery(String jsname,String packagename, String classname,String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			String s = 
+					"<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>"
+							+"<script>\r\n"
+							+"$.ajax({\r\n"
+							+"type : \"POST\",\r\n" 
+							+"url : \'"+url+"\',\r\n"
+							+"cache : false,\r\n" 
+							+"dataType:\"json\",\r\n"
+							+"data:"				
+							+"\'{\"user\" : \""+username+"\", \"service\" : \""+packagename+"\","+"\"daemon\" : \""+classname+"\", \"function\" : \""+jsname+"\","
+							+"\"parameter\" : "+param+" }\',\r\n"
+							+"success: function(jdata){\r\n"
+							+"document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;"
+							+"},\r\n"
+							+"error:function(xhr,status,e){\r\n"
+							+"alert('Error');\r\n"
+							+"},\r\n"
+							+"});\r\n" 
+							+"</script>"
+							+"<div id = \"a\">"
+							+"</div>"
+							; 
+			//에러 발생시 처리함수
+			out.write(s); out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	private boolean getPolling(String jsname,String packagename, String classname,String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			String s = 
+					"<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>"
+							+"<script>\r\n" 
+							+"(function poll(){" 
+							+"$.ajax({\r\n"
+							+"type : \"POST\",\r\n" 
+							+"url : \'"+url+"\',\r\n"
+							+"cache : false,\r\n" 
+							+"dataType:\"json\",\r\n"
+							+"data:"				
+							+"\'{\"user\" : \""+username+"\", \"service\" : \""+packagename+"\","+"\"daemon\" : \""+classname+"\", \"function\" : \""+jsname+"\","
+							+"\"parameter\" : "+param+" }\',\r\n"
+							+"success: function(jdata){\r\n"
+							+"document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;"
+							+"},\r\n"
+							+"error:function(xhr,status,e){\r\n"
+							+"alert('Error');\r\n"
+							+"},\r\n" 
+							+"complete : poll,\r\n" 
+							+"timeout : 50000\r\n" 
+							+"});\r\n" 
+							+"})();\r\n" 
+							+"</script>" 
+							+"<div id = \"a\">"
+							+"</div>"
+							; 
+			//에러 발생시 처리함수
+			out.write(s); out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	private boolean getJQuery(String tags,String jsname,String packagename, String classname,String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			String s = tags
+					+"<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>"
+					+"<script>\r\n"
+					+"$.ajax({\r\n"
+					+"type : \"POST\",\r\n" 
+					+"url : \'"+url+"\',\r\n"
+					+"cache : false,\r\n" 
+					+"dataType:\"json\",\r\n"
+					+"data:"				
+					+"\'{\"user\" : \""+username+"\", \"service\" : \""+packagename+"\","+"\"daemon\" : \""+classname+"\", \"function\" : \""+jsname+"\","
+					+"\"parameter\" : "+param+" }\',\r\n"
+					+"success: function(jdata){\r\n"
+					+"document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;"
+					+"},\r\n"
+					+"error:function(xhr,status,e){\r\n"
+					+"alert('Error');\r\n"
+					+"},\r\n"
+					+"});\r\n" 
+					+"</script>"
+					+"<div id = \"a\">"
+					+"</div>"
+					; 
+			//에러 발생시 처리함수
+			out.write(s); out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	private boolean getPolling(String tags, String jsname,String packagename, String classname,String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			String s = tags
+					+"<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>"
+					+"<script>\r\n" 
+					+"(function poll(){" 
+					+"$.ajax({\r\n"
+					+"type : \"POST\",\r\n" 
+					+"url : \'"+url+"\',\r\n"
+					+"cache : false,\r\n" 
+					+"dataType:\"json\",\r\n"
+					+"data:"				
+					+"\'{\"user\" : \""+username+"\", \"service\" : \""+packagename+"\","+"\"daemon\" : \""+classname+"\", \"function\" : \""+jsname+"\","
+					+"\"parameter\" : "+param+" }\',\r\n"
+					+"success: function(jdata){\r\n"
+					+"document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;"
+					+"},\r\n"
+					+"error:function(xhr,status,e){\r\n"
+					+"alert('Error');\r\n"
+					+"},\r\n" 
+					+"complete : poll,\r\n" 
+					+"timeout : 50000\r\n" 
+					+"});\r\n" 
+					+"})();\r\n" 
+					+"</script>" 
+					+"<div id = \"a\">"
+					+"</div>"
+					; 
+			//에러 발생시 처리함수
+			out.write(s); out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	private boolean getInsertJQuery(String tags,String jsname,String packagename, String classname,String tablename ){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			StringBuffer s = new StringBuffer("<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>\r\n")
+					.append(tags+"\r\n")
+					.append("<script>\r\n")
+					.append("$.fn.serializeObject = function(){\r\n")
+					.append("  var o = {};\r\n")
+					.append("	o[\"param1\"] = \""+tablename+"\";\r\n")
+					.append("	o[\"param2\"] = \"\";\r\n")
+					.append("	o[\"param3\"] = \"\";\r\n")
+					.append("	o[\"function\"] = \"insert\";\r\n")
+					.append("	var a = this.serializeArray();\r\n")
+					.append("   $.each( a, function(){\r\n")
+					.append("		if(o[\"param2\"]===\"\"){\r\n")
+					.append("			o[\"param2\"] += this.name;\r\n")
+					.append("		}else{		\r\n")
+					.append("			o[\"param2\"] += \", \"+this.name;\r\n")
+					.append("		}\r\n")
+					.append("		if(o[\"param3\"]===\"\"){\r\n")
+					.append("			o[\"param3\"] += this.value;\r\n")
+					.append("		}else{\r\n")
+					.append("			o[\"param3\"] += \", \"+this.value;\r\n")
+					.append("		}\r\n")
+					.append("   });\r\n")
+					.append("   return o;\r\n")
+					.append("};\r\n")
+					.append("$(function(){\r\n")
+					.append("	$(\"#submit\").click(function(){\r\n")
+					.append("		$.ajax({\r\n")
+					.append("			type : \"POST\",\r\n")
+					.append("			url:'http://211.189.127.244:8000/echo',               //데이터를 요청할 페이지\r\n")
+					.append("			cache : false,\r\n")
+					.append("			dataType:\"json\",\r\n")
+					.append("			data:'{ \"user\" : \"")
+					.append(username)
+					.append("\", \"service\" : \"")
+					.append(packagename)
+					.append("\", \"daemon\" : \"")
+					.append(classname)
+					.append("\", \"function\" : \"")
+					.append(jsname)
+					.append("\", \"parameter\" : ['+ JSON.stringify($('#frmData').serializeObject()) +']}',\r\n")
+					.append("			error:function(xhr,status,e){       //에러 발생시 처리함수\r\n")
+					.append("				alert('Error');\r\n")
+					.append("			},\r\n")
+					.append("			success: function(jdata){           //성공시 처리 함수, 인수는 위에서 data를 사용한 경우 \r\n")
+					.append("				console.log(jdata);\r\n")
+					.append("				document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;\r\n")
+					.append("			}\r\n")
+					.append("		});\r\n")
+					.append("	});\r\n")
+					.append("});\r\n")
+					.append("</script>\r\n")
+					.append("<div id = \"a\">\r\n")
+					.append("</div>\r\n");
+			out.write(s.toString()); out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	private boolean getInsertPolling(String tags, String jsname,String packagename, String classname,String tablename ){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			StringBuffer s = new StringBuffer("<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>\r\n")
+					.append(tags)
+					.append("<script>\r\n")
+					.append("$.fn.serializeObject = function(){\r\n")
+					.append("  var o = {};\r\n")
+					.append("	o[\"param1\"] = \""+tablename+"\";\r\n")
+					.append("	o[\"param2\"] = \"\";\r\n")
+					.append("	o[\"param3\"] = \"\";\r\n")
+					.append("	o[\"function\"] = \"insert\";\r\n")
+					.append("	var a = this.serializeArray();\r\n")
+					.append("   $.each( a, function(){\r\n")
+					.append("		if(o[\"param2\"]===\"\"){\r\n")
+					.append("			o[\"param2\"] += this.name;\r\n")
+					.append("		}else{		\r\n")
+					.append("			o[\"param2\"] += \", \"+this.name;\r\n")
+					.append("		}\r\n")
+					.append("		if(o[\"param3\"]===\"\"){\r\n")
+					.append("			o[\"param3\"] += this.value;\r\n")
+					.append("		}else{\r\n")
+					.append("			o[\"param3\"] += \", \"+this.value;\r\n")
+					.append("		}\r\n")
+					.append("   });\r\n")
+					.append("   return o;\r\n")
+					.append("};\r\n")
+					.append("$(function(){\r\n")
+					.append("	$(\"#submit\").click(function(){\r\n")
+					.append("		$.ajax({\r\n")
+					.append("			type : \"POST\",\r\n")
+					.append("			url:'http://211.189.127.244:8000/echo',               //데이터를 요청할 페이지\r\n")
+					.append("			cache : false,\r\n")
+					.append("			dataType:\"json\",\r\n")
+					.append("			data:'{ \"user\" : \"")
+					.append(username)
+					.append("\", \"service\" : \"")
+					.append(packagename)
+					.append("\", \"daemon\" : \"")
+					.append(classname)
+					.append("\", \"function\" : \"")
+					.append(jsname)
+					.append("\", \"parameter\" : ['+ JSON.stringify($('#frmData').serializeObject()) +']}',\r\n")
+					.append("			error:function(xhr,status,e){       //에러 발생시 처리함수\r\n")
+					.append("				alert('Error');\r\n")
+					.append("			},\r\n\r\n")
+					.append("			success: function(jdata){           //성공시 처리 함수, 인수는 위에서 data를 사용한 경우 \r\n")
+					.append("				console.log(jdata);\r\n")
+					.append("				document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;\r\n")
+					.append("			}\r\n")
+					.append("		});\r\n")
+					.append("	});\r\n")
+					.append("});\r\n")
+					.append("</script>\r\n")
+					.append("<div id = \"a\">\r\n")
+					.append("</div>\r\n");
+			//에러 발생시 처리함수
+			out.write(s.toString()); out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	private boolean getDeleteJQuery(String tags,String jsname,String packagename, String classname,String tablename ){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			StringBuffer s = new StringBuffer("<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>\r\n")
+					.append(tags+"\r\n")
+					.append("<script>\r\n")
+					.append("$.fn.serializeObject = function(){\r\n")
+					.append("  var o = {};\r\n")
+					.append("	o[\"param1\"] = \""+tablename+"\";\r\n")
+					.append("	o[\"param2\"] = \"\";\r\n")
+					.append("	o[\"param3\"] = \"\";\r\n")
+					.append("	o[\"function\"] = \"insert\";\r\n")
+					.append("	var a = this.serializeArray();\r\n")
+					.append("   $.each( a, function(){\r\n")
+					.append("		if(o[\"param2\"]===\"\"){\r\n")
+					.append("			o[\"param2\"] += this.name;\r\n")
+					.append("		}else{		\r\n")
+					.append("			o[\"param2\"] += \", \"+this.name;\r\n")
+					.append("		}\r\n")
+					.append("		if(o[\"param3\"]===\"\"){\r\n")
+					.append("			o[\"param3\"] += this.value;\r\n")
+					.append("		}else{\r\n")
+					.append("			o[\"param3\"] += \", \"+this.value;\r\n")
+					.append("		}\r\n")
+					.append("   });\r\n")
+					.append("   return o;\r\n")
+					.append("};\r\n")
+					.append("$(function(){\r\n")
+					.append("	$(\"#submit\").click(function(){\r\n")
+					.append("		$.ajax({\r\n")
+					.append("			type : \"POST\",\r\n")
+					.append("			url:'http://211.189.127.244:8000/echo',               //데이터를 요청할 페이지\r\n")
+					.append("			cache : false,\r\n")
+					.append("			dataType:\"json\",\r\n")
+					.append("			data:'{ \"user\" : \"")
+					.append(username)
+					.append("\", \"service\" : \"")
+					.append(packagename)
+					.append("\", \"daemon\" : \"")
+					.append(classname)
+					.append("\", \"function\" : \"")
+					.append(jsname)
+					.append("\", \"parameter\" : ['+ JSON.stringify($('#frmData').serializeObject()) +']}',\r\n")
+					.append("			error:function(xhr,status,e){       //에러 발생시 처리함수\r\n")
+					.append("				alert('Error');\r\n")
+					.append("			},\r\n")
+					.append("			success: function(jdata){           //성공시 처리 함수, 인수는 위에서 data를 사용한 경우 \r\n")
+					.append("				console.log(jdata);\r\n")
+					.append("				document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;\r\n")
+					.append("			}\r\n")
+					.append("		});\r\n")
+					.append("	});\r\n")
+					.append("});\r\n")
+					.append("</script>\r\n")
+					.append("<div id = \"a\">\r\n")
+					.append("</div>\r\n");
+			out.write(s.toString()); out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	protected boolean startParser(String js_name, String package_name,String class_name,String param){
+		if( getJQuery(js_name,package_name, class_name ,param) )
+			return true;
+		else
+			return false;
+	}
+	protected boolean startParserdiv(String js_name, String package_name,String class_name,String param,String tags){
+		if( getJQuery(tags,js_name,package_name, class_name ,param) )
+			return true;
+		else
+			return false;
+	}
+	protected boolean startInput(String js_name, String package_name,String class_name,String tags){
+		if( getJQuery(tags,js_name,package_name, class_name) )
+			return true;
+		else
+			return false;
+	}
+	protected boolean startInput(String js_name, String package_name,String class_name,String tags,String tablename){
+		if( getInsertJQuery(tags,js_name,package_name, class_name,tablename) )
+			return true;
+		else
+			return false;
+	}
+}

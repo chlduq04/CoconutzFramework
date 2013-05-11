@@ -19,7 +19,7 @@ public class CoconutzDate {
 			synchronized(CoconutzDate.class){
 				if (instance == null) {
 					instance = new CoconutzDate();
-					CoconutzRunnableClass.addRunnableClass(getInstance(), "DateHelper");
+					CoconutzRunnableClass.addRunnableClass(getInstance());
 				}
 			}
 		}

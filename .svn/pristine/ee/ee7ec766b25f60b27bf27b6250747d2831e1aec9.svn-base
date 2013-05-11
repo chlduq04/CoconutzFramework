@@ -1,0 +1,43 @@
+package com.coconutz.HelperRef;
+
+import coconutz.ForParser.CoconutzAjax;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzQuery;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+
+public class CoconutzTypography extends CoconutzAjax{
+	private CoconutzCLI cli;
+	private volatile static CoconutzTypography instance = null;
+	
+	private CoconutzTypography(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/typography");
+	}
+	
+	public static CoconutzTypography getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzTypography.class){
+				if (instance == null) {
+					instance = new CoconutzTypography();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+			
+		}
+		return instance;
+	}
+
+	public Coconut autoTypography(CoconutParameter cp){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/captcha/autoTypography\t"+ cp.toString()); }
+		return new Coconut("String",cli.console("String", "autoTypography", cp));
+	}
+	
+	public Coconut nl2brExceptPre(CoconutParameter cp){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/captcha/nl2brExceptPre\t"+ cp.toString()); }		
+		return new Coconut("String",cli.console("String", "nl2brExceptPre", cp));
+	}
+
+}

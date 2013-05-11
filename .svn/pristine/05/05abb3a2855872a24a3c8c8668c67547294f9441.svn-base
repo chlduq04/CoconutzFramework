@@ -1,0 +1,58 @@
+package com.coconutz;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+public class Coconut<T> {
+	
+	private T value;
+	private String type;
+
+	public Coconut(String str, T obj){
+		type = str;
+		value = obj;
+	}
+	
+	public String getString(){
+		return value.toString();
+	}
+	
+	public String type(){
+		return type;
+	}
+	
+	public T value(){
+		return value;
+	}
+	
+	static public JSONObject responseData(Coconut coconut)
+	{
+		JSONObject retData = new JSONObject();
+
+		try {
+			switch (coconut.type())
+			{
+			case "boolean":
+				retData.put("data", (boolean) coconut.value());
+				break;
+			case "String":
+				retData.put("data", (String) coconut.value());
+				break;
+			case "int":
+				retData.put("data", (int) coconut.value());
+				break;
+			case "JSONObject":
+				retData.put("data", (JSONObject) coconut.value());
+				break;
+			case "JSONArray":
+				break;
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return retData;
+	}
+}

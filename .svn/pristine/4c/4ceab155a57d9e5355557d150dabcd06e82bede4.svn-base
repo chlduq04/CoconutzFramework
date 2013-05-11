@@ -1,0 +1,20 @@
+package com.newService;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.HelperRef.CoconutzTable;
+import com.coconutz.HelperRef.CoconutzTesthelper;
+
+public class mytest5 extends CoconutzTesthelper{
+	public mytest5(){
+	}
+	public Coconut _testQuery(CoconutParameter parameter){
+		return super.TableTest(parameter);
+	}	
+	public Coconut _testTable(CoconutParameter parameter){
+		return super.getTable(parameter);
+	}	
+//	public Coconut _createTable(){
+//		table.getTableFromDB(parameter);
+//	}
+}

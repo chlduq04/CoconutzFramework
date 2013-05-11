@@ -1,0 +1,17 @@
+package com.newService;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.DriverRef.DB.CoconutzDB;
+
+public class mytest4 extends CoconutzDB{
+	public mytest4() {
+	}
+	public Coconut _query(CoconutParameter parameter){
+		return super.query(parameter);
+	}
+	public Coconut _testQuery(CoconutParameter parameter){
+		return super.Select(parameter);
+	}	
+}
+//OrderBy, Like, Where, Join, SelectMin, SelectMax,Select
