@@ -2,9 +2,12 @@ package com.coconutz;
 
 
 
+
 import java.util.StringTokenizer;
 
-public class CoconutzFormBase {
+import com.coconutz.Service.CoconutzSetting;
+
+public class CoconutzFormBase extends CoconutzSetting{
 	
 	private StringBuffer form;
 	
@@ -71,28 +74,17 @@ public class CoconutzFormBase {
 
 	/*form open mulitipart*/
 
-	public CoconutzFormBase form_open_multipart( String argu, String value ){
-		reset();
-		return form_open_multipart(Stringtoken(argu), Stringtoken(value));
-	}
 	public CoconutzFormBase form_open_multipart(String id, String argu, String value ){
 		reset();
-		return form_open_multipart(Stringtoken(argu), Stringtoken(value));
-	}
-	public CoconutzFormBase form_open_multipart( String argu[], String value[]){
-		appendBuffer("<form method=\"post\" accept-charset=\"utf-8\" ");
-		for( int i=0 ; i < argu.length ; i++ ){
-			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
-		}
-		appendBuffer("enctype=\"multipart/form-data\""+">\r\n");
-		return this;
+		return form_open_multipart( id, Stringtoken(argu), Stringtoken(value) );
 	}
 	public CoconutzFormBase form_open_multipart(String id, String argu[], String value[]){
-		appendBuffer("<form id =  \""+id+"\" method=\"post\" accept-charset=\"utf-8\" ");
+		appendBuffer("<form id =  \""+id+"\" method=\"post\" accept-charset=\"utf-8\" action = \"" + super.url+"\"");
 		for( int i=0 ; i < argu.length ; i++ ){
 			appendBuffer(argu[i] + "=\""+value[i]+"\" ");
 		}
-		appendBuffer("enctype=\"multipart/form-data\""+">\r\n");
+	 	appendBuffer("enctype=\"multipart/form-data\""+">\r\n");
+		appendBuffer("<iframe id=\""+id+"Frame\" name=\"uploadIFrame\" style=\"display:none;visibility:hidden\"></iframe>\r\n");
 		return this;
 	}
 
@@ -321,7 +313,7 @@ public class CoconutzFormBase {
 	public CoconutzFormBase form_close(){
 		appendBuffer("</form>\r\n");
 		return this;
-	}
+	}	
 
 	public String getForm(){
 		return form.toString();
@@ -347,6 +339,19 @@ public class CoconutzFormBase {
 	}
 	public CoconutzFormBase form_input( String argu[], String value[] ){
 		appendBuffer("<input type=\"text\" ");
+		for( int i=0 ; i < argu.length ; i++ ){
+			appendBuffer(argu[i] +"=\"" + value[i] +"\" ");			
+		}
+		appendBuffer("/>\r\n");
+		return this;
+	}
+	
+	/*form_file*/
+	public CoconutzFormBase form_file( String argu, String value ){
+		return form_file(Stringtoken(argu), Stringtoken(value));
+	}
+	public CoconutzFormBase form_file( String argu[], String value[] ){
+		appendBuffer("<input type=\"file\" ");
 		for( int i=0 ; i < argu.length ; i++ ){
 			appendBuffer(argu[i] +"=\"" + value[i] +"\" ");			
 		}

@@ -1,0 +1,14 @@
+package coconutz.test;
+
+import com.coconutz.HelperRef.CoconutzCreateTable;
+import com.coconutz.HelperRef.CoconutzTesthelper;
+
+public class CoconutzTestHtml extends CoconutzTesthelper{
+	public CoconutzHtml HTML;
+	public CoconutzTestHtml(){
+		super();
+	}
+	public CoconutzTestHtml(CoconutzCreateTable ...newTable){
+		super(newTable);
+	}
+}

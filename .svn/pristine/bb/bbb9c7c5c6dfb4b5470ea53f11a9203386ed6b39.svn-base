@@ -1,0 +1,101 @@
+package com.coconutz;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.sun.media.sound.JavaSoundAudioClip;
+
+
+public class Coconut {
+	
+	private String returnType;
+	private JSONObject returnJson = new JSONObject();
+	private JSONObject data = null;
+	public Coconut(){
+		setReturnType("json");
+		data = new JSONObject();
+	}
+	public Coconut( JSONObject obj ){
+		setReturnType("json");
+		data = obj;
+	}
+	
+	public String getString() {
+		return returnJson.toString();
+	}
+
+	public String getReturnType() {
+		return returnType;
+	}
+
+	public void setReturnType(String returnType) {
+		this.returnType = returnType;
+	}
+
+	public boolean put(String key, int value) {
+		try {
+			data.put(key, value);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public boolean put(String key, long value) {
+		try {
+			data.put(key, value);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public boolean put(String key, double value) {
+		try {
+			data.put(key, value);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public boolean put(String key, boolean value) {
+		try {
+			data.put(key, value);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public boolean put(String key, String value) {
+		try {
+			data.put(key, value);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean put(JSONObject json) {
+		returnJson = json;
+		return true;
+	}
+	
+	public JSONObject responseData()
+	{
+		try {
+			returnJson.put("result", "success");
+			returnJson.put("data", data);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return returnJson;
+	}
+
+}

@@ -1,12 +1,12 @@
 package com.coconutz;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CoconutzQuery{
+import com.coconutz.Service.CoconutzSetting;
+public class CoconutzQuery extends CoconutzSetting{
 	protected JSONArray query;
 
 	public CoconutzQuery(){
@@ -32,7 +32,9 @@ public class CoconutzQuery{
 		JSONArray result = query;
 		return result.toString();		
 	}
-	
+	public String END(){
+		return POP();
+	}
 	public String POP(){
 		String argu = query.toString();
 		query = new JSONArray();
@@ -82,8 +84,10 @@ public class CoconutzQuery{
 		return this;
 	}
 	
-	public CoconutzQuery delete( String argu ){
-		return superQuery("delete", argu);
+	public CoconutzQuery DELETE( String argu ){
+		if(!hideCode)
+			return superQuery("delete", argu);
+		return superQuery(""+Cdelete, argu);
 	}
 	/*--select--*/
 	/** Make Selct Query
@@ -92,8 +96,10 @@ public class CoconutzQuery{
 	 * -> "SELECT table, name, argu"
 	 **/
 	
-	public CoconutzQuery select( String argu ) {
-		return superQuery("select",argu);
+	public CoconutzQuery SELECT( String argu ) {
+		if(!hideCode)
+			return superQuery("select",argu);
+		return superQuery(""+Cselect,argu);
 	}
 	//	public CoconutQuery select(String argu){
 	//		return select(Stringtoken(argu));
@@ -110,24 +116,35 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery select_max( String argu ) {
-		return superQuery("select_max",argu);
+	public CoconutzQuery SELECT_MAX( String argu ) {
+		if(!hideCode)
+			return superQuery("select_max",argu);
+		return superQuery(""+Cselect_max,argu);
 	}
 	//	public CoconutQuery select_max( String argu ){
 	//		String result = "SELECT MAX("+argu+") as" + argu +" " + query;
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery select_max( String argu, String as ) {
-		return superQuery("select", argu, as);
+	public CoconutzQuery SELECT_MAX( String argu, String as ) {
+		if(!hideCode)
+			return superQuery("select", argu, as);
+		return superQuery(""+Cselect_max, argu, as);
 	}
 	//	public CoconutQuery select_max( String argu, String as ){
 	//		String result = "SELECT MAX("+argu+") as" + as +" " + query;		
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery select_min( String argu, String as ) {
-		return superQuery("select_min", argu, as);
+	public CoconutzQuery SELECT_MIN( String argu ) {
+		if(!hideCode)
+			return superQuery("select_min", argu );
+		return superQuery(""+Cselect_min, argu );
+	}
+	public CoconutzQuery SELECT_MIN( String argu, String as ) {
+		if(!hideCode)
+			return superQuery("select_min", argu, as);
+		return superQuery(""+Cselect_min, argu, as);
 	}
 	//	public CoconutQuery select_min( String argu ){
 	//		String result = "SELECT MIN("+argu+") as" + argu +" " + query;;
@@ -139,8 +156,15 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery select_sum( String argu, String as ) {
-		return superQuery("select_sum", argu, as);
+	public CoconutzQuery SELECT_SUM( String argu) {
+		if(!hideCode)
+			return superQuery("select_sum", argu);
+		return superQuery(""+Cselect_sum, argu);
+	}
+	public CoconutzQuery SELECT_SUM( String argu, String as ) {
+		if(!hideCode)
+			return superQuery("select_sum", argu, as);
+		return superQuery(""+Cselect_sum, argu, as);
 	}
 	//	public CoconutQuery select_sum( String argu ){
 	//		String result = "SELECT SUM("+argu+") as" + query;
@@ -152,9 +176,22 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
+	public CoconutzQuery SELECT_COUNT( String argu) {
+		if(!hideCode)
+			return superQuery("select_count", argu);
+		return superQuery(""+Cselect_count, argu);
+	}
+	public CoconutzQuery SELECT_COUNT( String argu, String as ) {
+		if(!hideCode)
+			return superQuery("select_count", argu, as);
+		return superQuery(""+Cselect_count, argu, as);
+	}
+
 	//	/*--from--*/
-	public CoconutzQuery from( String argu ) {
-		return superQuery("from",argu);
+	public CoconutzQuery FROM( String argu ) {
+		if(!hideCode)
+			return superQuery("from",argu);
+		return superQuery(""+Cfrom,argu);
 	}
 	//	public CoconutQuery from( String argu ){
 	//		String result = "FROM " + argu +" ";
@@ -162,16 +199,26 @@ public class CoconutzQuery{
 	//		return new CoconutQuery( query );
 	//	}
 	//	/*--join--*/
-	public CoconutzQuery join( String argu, String as ) {
-		return superQuery("join", argu, as);
+	public CoconutzQuery JOIN( String table){
+		if(!hideCode)
+			return superQuery("join", table);
+		return superQuery(""+Cjoin, table);
+	}
+	
+	public CoconutzQuery JOIN( String argu, String as ) {
+		if(!hideCode)
+			return superQuery("join", argu, as);
+		return superQuery(""+Cjoin, argu, as);
 	}
 	//	public CoconutQuery join( String argu, String as ){
 	//		String result = "JOIN " + argu +" ON "+ as +" ";
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery from( String argu, String as, String option ) {
-		return superQuery("from", argu, as, option);
+	public CoconutzQuery JOIN( String argu, String as, String option ) {
+		if(!hideCode)
+			return superQuery("join", argu, as, option);
+		return superQuery(""+Cjoin, argu, as, option);
 	}
 	//	public CoconutQuery join( String argu, String as, String option ){
 	//		String result = option +"JOIN " + argu +" ON "+ as +" ";;
@@ -179,8 +226,10 @@ public class CoconutzQuery{
 	//		return new CoconutQuery( query );
 	//	}
 	//	/*--where--*/
-	public CoconutzQuery where( String argu, String value ) {
-		return superQuery("where", argu, value);
+	public CoconutzQuery WHERE( String argu, String value ) {
+		if(!hideCode)
+			return superQuery("where", argu, value);
+		return superQuery(""+Cwhere, argu, value);
 	}
 	//	public CoconutQuery where( boolean where, String argu, String value ){
 	//		return where(where,Stringtoken(argu),Stringtoken(value));
@@ -201,8 +250,10 @@ public class CoconutzQuery{
 	//		return new CoconutQuery( query );
 	//	}
 	//	/*--or_where--*/
-	public CoconutzQuery or_where( String argu, String value ) {
-		return superQuery("or_where", argu, value);
+	public CoconutzQuery OR_WHERE( String argu, String value ) {
+		if(!hideCode)
+			return superQuery("or_where", argu, value);
+		return superQuery(""+Cor_where, argu, value);
 	}
 	//	public CoconutQuery or_where(boolean where, String argu, String value ){
 	//		return or_where(where, Stringtoken(argu),Stringtoken(value));
@@ -223,8 +274,10 @@ public class CoconutzQuery{
 	//		return new CoconutQuery( query );
 	//	}
 	//	/*--or_where_in--*/
-	public CoconutzQuery or_where_in( String argu, String value ) {
-		return superQuery("or_where_in", argu, value);
+	public CoconutzQuery OR_WHERE_IN( String argu, String value ) {
+		if(!hideCode)
+			return superQuery("or_where_in", argu, value);
+		return superQuery(""+Cor_where_in, argu, value);
 	}
 	//	public CoconutQuery or_where_in( boolean where, String argu, String value ){
 	//		return or_where_in(where, argu, Stringtoken(value));
@@ -245,8 +298,10 @@ public class CoconutzQuery{
 	//		return new CoconutQuery( query );
 	//	}
 	//	/*--where_not_in--*/
-	public CoconutzQuery where_not_in( String argu, String value ) {
-		return superQuery("where_not_in", argu, value);
+	public CoconutzQuery WHERE_NOT_IN( String argu, String value ) {
+		if(!hideCode)
+			return superQuery("where_not_in", argu, value);
+		return superQuery(""+Cwhere_not_in, argu, value);
 	}
 	//	public CoconutQuery wehre_not_in( boolean where, String argu, String value ){
 	//		return where_not_in(where, argu, Stringtoken(value));
@@ -267,8 +322,10 @@ public class CoconutzQuery{
 	//		return new CoconutQuery( query );
 	//	}
 	//	/*--or_where_not_in--*/
-	public CoconutzQuery or_where_not_in( String argu, String value ) {
-		return superQuery("or_where_not_in",argu,value);
+	public CoconutzQuery OR_WHERE_NOT_IN( String argu, String value ) {
+		if(!hideCode)
+			return superQuery("or_where_not_in",argu,value);
+		return superQuery(""+Cor_where_not_in,argu,value);
 	}
 
 	//	public CoconutQuery or_where_not_in( boolean where, String argu, String value ){
@@ -311,8 +368,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery like( String argu, String value, String option ) {
-		return superQuery("like",argu,value,option);
+	public CoconutzQuery LIKE( String argu, String value, String option ) {
+		if(!hideCode)
+			return superQuery("like",argu,value,option);
+		return superQuery(""+Clike,argu,value,option);
 	}
 	//	public CoconutQuery like( boolean where, String argu, String value ,String option){
 	//		return like(where, Stringtoken(argu), Stringtoken(value),option);
@@ -370,8 +429,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery or_like( String argu, String value ,String option) {
-		return superQuery("or_like", argu,value,option);
+	public CoconutzQuery OR_LIKE( String argu, String value ,String option) {
+		if(!hideCode)
+			return superQuery("or_like", argu, value, option);
+		return superQuery(""+Cor_like, argu, value, option);
 	}
 
 	//	public CoconutQuery or_like( boolean where, String argu,String value,String option){
@@ -407,8 +468,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery not_like( String argu, String value ) {
-		return superQuery("or_where_not_in",argu,value);
+	public CoconutzQuery NOT_LIKE( String argu, String value ) {
+		if(!hideCode)
+			return superQuery("not_like", argu, value);
+		return superQuery(""+Cnot_like, argu, value);
 	}	
 	//	public CoconutQuery not_like( boolean where,String argu,String value){
 	//		return not_like(where, Stringtoken(argu), Stringtoken(value));
@@ -428,8 +491,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery or_where_not_in( String argu, String value, String option ) {
-		return superQuery("or_where_not_in",argu,value,option);
+	public CoconutzQuery OR_WHERE_NOT_IN( String argu, String value, String option ) {
+		if(!hideCode)
+			return superQuery("or_where_not_in",argu,value,option);
+		return superQuery(""+Cor_where_not_in,argu,value,option);
 	}	
 	//	public CoconutQuery not_like( boolean where,String argu,String value,String option){
 	//		return not_like(where, Stringtoken(argu), Stringtoken(value),option);
@@ -464,8 +529,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery or_not_like( String argu, String value ) {
-		return superQuery("or_not_like",argu,value);
+	public CoconutzQuery OR_NOT_LIKE( String argu, String value ) {
+		if(!hideCode)
+			return superQuery("or_not_like",argu,value);
+		return superQuery(""+Cor_not_like,argu,value);
 	}	
 	//	public CoconutQuery or_not_like( boolean where, String argu,String value){
 	//		return or_not_like(where, Stringtoken(argu), Stringtoken(value));
@@ -485,8 +552,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery or_not_like( String argu, String value, String option ) {
-		return superQuery("or_not_like",argu,value,option);
+	public CoconutzQuery OR_NOT_LIKE( String argu, String value, String option ) {
+		if(!hideCode)
+			return superQuery("or_not_like",argu,value,option);
+		return superQuery(""+Cor_not_like,argu,value,option);
 	}
 	//	public CoconutQuery or_not_like( boolean where, String argu,String value,String option){
 	//		return or_not_like(where, Stringtoken(argu), Stringtoken(value),option);
@@ -521,8 +590,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery group_by( String argu ) {
-		return superQuery("group_by",argu );
+	public CoconutzQuery GROUP_BY( String argu ) {
+		if(!hideCode)
+			return superQuery("group_by",argu );
+		return superQuery(""+Cgroup_by,argu );
 	}
 	//	public CoconutQuery group_by( String argu ){
 	//		return group_by(Stringtoken(argu));
@@ -538,8 +609,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery distinct() {
-		return superQuery("distinct","");
+	public CoconutzQuery DISTINCT() {
+		if(!hideCode)
+			return superQuery("distinct","");
+		return superQuery(""+Cdistinct,"");
 	}
 	//	public void distinct(){
 	//		String value = "SELECT";
@@ -551,9 +624,11 @@ public class CoconutzQuery{
 	//			query.replace(0, query.length(), query.substring(0, check) + " DISTINCT" + query.substring(check,query.length()));
 	//		}
 	//	}
-	public CoconutzQuery having( String argu, boolean escape ) {
+	public CoconutzQuery HAVING( String argu, boolean escape ) {
 		String bool = " "+escape;
-		return superQuery("having",argu,bool.toUpperCase());
+		if(!hideCode)
+			return superQuery("having",argu,bool.toUpperCase());
+		return superQuery(""+Chaving,argu,bool.toUpperCase());
 	}	
 	//	public CoconutQuery having(  String value, boolean escape ){
 	//		return having(Stringtoken(value), escape);
@@ -569,9 +644,11 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery or_having( String argu, boolean escape  ) {
+	public CoconutzQuery OR_HAVING( String argu, boolean escape  ) {
 		String bool = " "+escape;
-		return superQuery("having",argu,bool.toUpperCase());
+		if(!hideCode)
+			return superQuery("or_having",argu,bool.toUpperCase());
+		return superQuery(""+Cor_having,argu,bool.toUpperCase());
 	}	
 	//	public CoconutQuery or_having( String value, boolean escape ){
 	//		return or_having(Stringtoken(value), escape);
@@ -587,17 +664,19 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery order_by( String argu, String option ) {
+	public CoconutzQuery ORDER_BY( String argu, String option ) {
 		switch(option){
-		case "asc":
-		case "desc":
-		case "random":
+		case "asc": case "ASC" :
+		case "desc": case "DESC" :
+		case "random": case "RANDOM" :
 			break;
 		default:
 			option = "";
 			break;
 		}
-		return superQuery("having",argu,option);
+		if(!hideCode)
+			return superQuery("order_by",argu,option);
+		return superQuery(""+Corder_by,argu,option);
 	}	
 	//	public CoconutQuery order_by( String argu, String order_option ){
 	//		return order_by(Stringtoken(argu), Stringtoken(order_option));
@@ -622,16 +701,26 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}
-	public CoconutzQuery limit( int argu,int offset ) {
-		return superQuery("limit", ""+argu,""+offset);
+	
+	public CoconutzQuery LIMIT( int argu ) {
+		if(!hideCode)
+			return superQuery("limit", ""+argu);
+		return superQuery(""+Climit, ""+argu);
+	}	
+	public CoconutzQuery LIMIT( int argu,int offset ) {
+		if(!hideCode)
+			return superQuery("limit", ""+argu,""+offset);
+		return superQuery(""+Climit, ""+argu,""+offset);
 	}	
 	//	public CoconutQuery limit(int limit, int offset){
 	//		String result = "LIMIT "+limit+" "+offset+" ";
 	//		query.append(result);
 	//		return new CoconutQuery( query );
 	//	}	
-	public CoconutzQuery insert( String table, String argu, String value ) {
-		return superQuery("insert", table, argu, value);
+	public CoconutzQuery INSERT( String table, String argu, String value ) {
+		if(!hideCode)
+			return superQuery("insert", table, argu, value);
+		return superQuery(""+Cinsert, table, argu, value);
 	}
 	//	public void insert( String table, String argu, String value ){
 	//		insert(table, Stringtoken(argu), Stringtoken(value));
@@ -677,8 +766,10 @@ public class CoconutzQuery{
 	//		query.append(result);
 	//	}
 	//	/**coconut ci - insert**/
-	public CoconutzQuery set() {
-		return superQuery("set", "");
+	public CoconutzQuery SET( String argu ) {
+		if(!hideCode)
+			return superQuery("set", argu);
+		return superQuery(""+Cset, argu);
 	}
 	//	public void set(){}
 	//	/**coconut ci - insert batch**/	
@@ -697,8 +788,10 @@ public class CoconutzQuery{
 	//		insert(table, argu, value);
 	//		//+ escape
 	//	}
-	public CoconutzQuery update(String argu) {
-		return superQuery("update", argu);
+	public CoconutzQuery UPDATE(String argu) {
+		if(!hideCode)
+			return superQuery("update", argu);
+		return superQuery(""+Cupdate, argu);
 	}
 	//	/**coconut ci - update**/		
 	//	public void update( String table,String argu, String value ){
@@ -716,27 +809,20 @@ public class CoconutzQuery{
 	//		update(table, argu, value);
 	//		//+ escape
 	//	}
-	//	/**coconut ci - delete**/		
-	public CoconutzQuery delete(String argu, String where) {
-		return superQuery("delete", argu , where);
-	}
-	
+	//	/**coconut ci - delete**/	
+		
 	//	public void delete( String table ){}
 	//	/**coconut ci - delete**/		
 	//	public void delete( String table, String where ){}
 	//	/**coconut ci - delete**/		
 	//	public void delete( String table[] ){}
 	//	/**coconut ci - count_all**/
-	public CoconutzQuery count_all(String argu) {
-		return superQuery("count_all", argu);
-	}
+
 	//	public int count_all( String argu ){
 	//		int result = 0;
 	//		return result;
 	//	}
-	public CoconutzQuery count_all_result() {
-		return superQuery("count_all_result", "");
-	}	
+
 	//	/**coconut ci - count_all_result**/
 	//	public int count_all_result( String argu ){
 	//		int result =0;

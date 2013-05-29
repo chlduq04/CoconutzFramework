@@ -3,14 +3,18 @@ package com.coconutz;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import Common.Option;
+import DM.D_ConnectToSub;
+import System.DSystemStatusReader;
+
 import com.coconutz.Server.ServerHandler;
-import com.newService.MyRunnableClass;
+import com.coconutz.Service.CoconutzSetting;
+import com.coconutz.Service.MyRunnableClass;
 import com.sun.net.httpserver.HttpServer;
 
 
-
 /*********************************************************************************************
-* @brief  CoconutzDaemonÀ» ½ÇÇà½ÃÄÑÁØ´Ù.
+* @brief  CoconutzDaemonì„ ì‹¤í–‰ì‹œì¼œì¤€ë‹¤.
 * @file  CoconutzDaemon.java
 * @author  LEEJEONGSUB
 * @date  2013. 4. 11.
@@ -30,32 +34,52 @@ import com.sun.net.httpserver.HttpServer;
 
 
  /*********************************************************************************************
- * @brief  CoconutzDaemonÀ» ½ÇÇà½ÃÄÑÁØ´Ù.
+ * @brief  CoconutzDaemonì„ ì‹¤í–‰ì‹œì¼œì¤€ë‹¤.
  * @file  CoconutzDaemon.java
  * @author  LEEJEONGSUB
  * @date  2013. 4. 11.
  *********************************************************************************************/
 public class CoconutzDaemon {
-	static int port = 8000;
-
-	
 	/*******************************************************************************************************
 	 * @brief 
 	 * @method main
 	 * @file CoconutzDaemon.java
 	 * @author LEEJEONGSUB
 	 * @date  2013. 4. 11.
-	 * @param args
+	 * @param args[0] - user id
+	 * 			args[1] - service name
+	 * 			args[2] - daemon name
+	 * 			args[3] - port
 	 * @throws IOException
 	 *******************************************************************************************************/
 	 
 	public static void main(String[] args) throws IOException {
-		if (args.length > 1) {
-			port = Integer.parseInt(args[1]);
+		
+		Option.setOption();
+		
+		int port;
+		
+		if (args.length == 0) {
+			port = 8000;
 		}
+		port = Integer.parseInt(Option.op_set.get("D_PORT"));
+		CoconutzSetting.url = "http://" + DSystemStatusReader.getIpAddress() + ":" + port + "/echo";
+		System.out.println("port!!!!!! : " + port);
+		
 		HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+		// Subï¿½Å´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+		D_ConnectToSub dct = new D_ConnectToSub(server);
+		dct.start();
+		
+
+		CoconutzSetting.USERID = (Option.op_set.get("USER_NAME"));
+		CoconutzSetting.SERVICENAME = (Option.op_set.get("SERVICE_NAME"));
+		CoconutzSetting.DAEMONNAME = (Option.op_set.get("DAEMON_NAME"));
+		
+		
 		server.createContext("/echo", new ServerHandler());
 		server.start();
+		
         System.out.println("daemon starting on port " + port);
 
         CoconutzRunnableClass coconutzRun = new MyRunnableClass();

@@ -1,0 +1,89 @@
+package com.coconutz.HelperRef;
+
+import org.json.JSONException;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzDataBase;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+/*********************************************************************************************
+* @brief PAGENATION 이용하여 PAGENATION을 생성한다.
+* @file  CoconutzNumber.java
+* @author  CHOIUNGYEOP
+* @date  2013. 5.
+*********************************************************************************************/
+public class CoconutzPagination {
+	private CoconutzCLI cli;
+	private volatile static CoconutzPagination instance = null;
+	/*******************************************************************************************************
+	 * @brief 숫자를 등록하면 숫자를 단위로 바꾸어 반환한다.
+	 * @method CoconutzPagination
+	 * @file CoconutzNumber.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public CoconutzPagination(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_Class/Pagination");
+	}	
+	/*******************************************************************************************************
+	 * @brief instance를 반환한다. 없다면 새로 생성하고 반환한다.
+	 * @method getInstance
+	 * @file CoconutzNumber.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public static CoconutzPagination getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzPagination.class){
+				if (instance == null) {
+					instance = new CoconutzPagination();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+	/*******************************************************************************************************
+	 * @brief 간단하게 pagination을 반환한다.
+	 * @method getPagination
+	 * @file CoconutzNumber.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getPagination(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }		
+			return new Coconut(cli.console("generatePagination", parameter ));		
+	}
+	/*******************************************************************************************************
+	 * @brief pagination을 customize할 수 있다.
+	 * @method getPaginationCustomize
+	 * @file CoconutzNumber.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getPaginationCustomize(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }		
+			return new Coconut(cli.console("generatePaginationCustom", parameter ));		
+	}
+/*	
+	public Coconut getTest(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }	
+		return new Coconut(cli.console("generateTest", parameter));
+	}
+	public Coconut getTableFromDB(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }		
+		try {
+			return new Coconut(cli.console("generateFromDB", new CoconutParameter(new CoconutzDataBase(parameter.getJsonArray()).getJson())));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(cli.console("generateFromDB", parameter ));		
+		}
+	}	
+	*/
+}

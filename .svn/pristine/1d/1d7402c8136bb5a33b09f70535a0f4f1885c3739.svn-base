@@ -1,0 +1,403 @@
+package com.coconutz.Server;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.StringTokenizer;
+
+import org.json.JSONObject;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzLog;
+import com.coconutz.G;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+
+public class FormHandler {
+
+	long logCnt;
+	
+	public FormHandler(long logCnt) {
+		this.logCnt = logCnt;
+	}
+	
+	public ArrayList<HashMap<String, String>> getFormData(HttpExchange xchg, String boundary) {
+
+		ArrayList<HashMap<String, String>> formData = new ArrayList<HashMap<String, String>>();
+		
+		// 바운더리 구분자 바이트 변환
+		byte[] boundary_byte = new byte[boundary.length()+2];
+		byte[] pre_boundary_byte = new byte[boundary.length()];
+		pre_boundary_byte = boundary.getBytes();
+		boundary_byte[0] = 13;
+		boundary_byte[1] = 10;
+		for (int i=0; i<boundary.length(); i++)
+			boundary_byte[i+2] = pre_boundary_byte[i];
+		
+		
+		// 바운더리 구분자 바이트 단위 확인
+//		for (int i=0; i<boundary_byte.length; i++){
+//			System.out.print(boundary_byte[i] + " ");
+//		}
+		// 바운더리 구분자 확인
+		CoconutzLog.put(logCnt, boundary);
+		
+		InputStream is = xchg.getRequestBody();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		/*String str;
+		try {
+			str = br.readLine();
+			Global.DEBUG(str);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		byte read_byte;
+		try {
+			while( ( read_byte=(byte) br.read() ) != -1){
+				System.out.print(read_byte + " ");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+
+		int loop;
+		//루프전에 웹킷 체크하고
+		loop = checkWebkit(boundary, br);
+		while( loop == SUCCESS ){
+			HashMap<String, String> input = new HashMap<String, String>();
+			input = readContentPosition(boundary, br);
+			if ( input.get("filename") != null ) {
+				String filename = input.get((String)"filename");
+				filename = filename.replace("\"", "");
+				input.put("filename", filename);
+				
+				try {
+					String contentType = br.readLine();
+					//if (G.DEBUG) { G.debugPrint(contentType); }
+					br.readLine();
+				} catch (IOException e) {
+					CoconutzLog.put(logCnt, e.getMessage());
+				}
+				try {
+					String time = "" + System.currentTimeMillis();
+					input.put("time", time);
+					input.put("value", time + "/" + filename);
+					loop = saveFile(br, boundary_byte, input.get("filename"), time);
+				} catch (FileNotFoundException e) {
+					CoconutzLog.put(logCnt, e.getMessage());
+				}
+				if (loop == FILEERROR){
+					loop = SUCCESS;
+				}
+				else {
+					formData.add(input);					
+				}
+				
+			}
+			else {
+				String value = "";
+				try {
+					br.readLine();
+					loop=CONTINUE;
+					String readLine = br.readLine();
+					while ( !(loop == SUCCESS || loop == END) ) {
+						value += readLine;
+						readLine = br.readLine();
+						if ( readLine.compareTo(boundary) == 0 ){
+							loop = SUCCESS;
+						}
+						else if ( readLine.compareTo(boundary + "--") == 0 ){
+							loop = END;
+						}
+						else {
+							value += "\n";
+							loop = CONTINUE;
+						}
+					}
+				} catch (IOException e) {
+					CoconutzLog.put(logCnt, e.getMessage());
+				}
+				input.put("value", value);
+				formData.add(input);
+				//루프에 웹킷 체크
+				
+			}
+			
+		}
+		if (loop == ERROR) {
+			CoconutzLog.put(logCnt, "error");
+		}
+		
+			
+/*
+		String line = null;
+
+		try {
+			while ( (line = br.readLine()) != null) {
+				readLine += line + "\n";
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(readLine);
+		*/
+		return formData;
+	}
+	
+
+
+	
+	
+	static private int SUCCESS = 1;
+	static private int END = 2;
+	static private int ERROR = 3; 
+	static private int CONTINUE = 4; 
+	static private int FILEERROR = 5;
+	
+	private int checkWebkit(String boundary, BufferedReader br){
+		
+		String readLine = null;
+		try {
+			readLine = br.readLine();
+		} catch (IOException e) {
+			if (G.DEBUG) { G.debugPrint(readLine + "ERROR"); }
+
+			return ERROR;
+		}
+		if ( readLine.compareTo(boundary) == 0 ) {
+			//if (G.DEBUG) { G.debugPrint(readLine + "Success"); }
+			return SUCCESS;
+		}
+		else if ( readLine.compareTo(boundary+"--") == 0 ) {
+			if (G.DEBUG) { G.debugPrint(readLine + "End"); }
+			return END;
+		}
+		else {
+			if (G.DEBUG) { G.debugPrint(readLine + "ERROR"); }
+			return ERROR;
+		}
+		
+	}
+	
+	private HashMap<String, String> readContentPosition(String boundary, BufferedReader br) {
+		
+		//String m = "con : fom ; cont : ewf ; dfasf : \"fwef\"";
+		String readLine = null;
+		try {
+			readLine = br.readLine();
+		} catch (IOException e) {
+			CoconutzLog.put(logCnt, e.getMessage());
+		}
+		ArrayList<HashMap<String, String>> k = parser(readLine);
+		//System.out.println(k.toString());
+		//System.out.println(k.get(0).get("con"));
+		
+		
+		return k.get(0);
+	}
+	
+	private int saveFile(BufferedReader br, byte[] boundary_byte, String filename, String time) throws FileNotFoundException {
+		
+		if ( filename.isEmpty() ) {
+			try {
+				String str = br.readLine();
+				str = br.readLine();
+				//str = br.readLine();
+			} catch (IOException e) {
+				CoconutzLog.put(logCnt, e.getMessage());
+			}
+			return FILEERROR;
+		}
+		
+		filename = filename.replaceAll("\"", "");
+		int boundary_length = boundary_byte.length;
+		byte [] temp_boundary = new byte [boundary_length];
+		int count = 0;
+		byte read_byte;
+		/*String time = makeDir();
+		if ( time == null ){
+			System.out.println("ERROR!");
+			return ERROR;
+		}*/
+		try {
+			String path = System.getProperty("user.dir") + "/" + time;
+			File file = new File(path);
+			if (!file.exists()) file.mkdirs();
+			file = new File(path + "/" + filename);
+			FileOutputStream os = new FileOutputStream(file);
+			
+
+			read_byte=(byte) br.read();
+			while( read_byte != -1){
+				if (read_byte == boundary_byte[count]) {
+					temp_boundary[count] = read_byte; 
+					count ++;
+				}
+				else {
+					if (count != 0) {
+						for (int i=0; i<count; i++){
+							os.write(temp_boundary[i]);
+						}
+						count=0;
+					}
+					else {
+						os.write(read_byte);
+					}
+					count=0;
+				}
+				
+				if (count == boundary_length){
+					
+					break;
+				}
+				//System.out.print(read_byte + " ");
+				read_byte=(byte) br.read();
+			}
+			os.close();
+		} catch (IOException e2) {
+			CoconutzLog.put(logCnt, e2.getMessage());
+			return ERROR;
+		}
+		try {
+			br.readLine();
+		} catch (IOException e) {
+			CoconutzLog.put(logCnt, e.getMessage());
+		}
+		return SUCCESS;
+	}
+	
+	private String makeDir() {
+		findOS();
+		Runtime rt = Runtime.getRuntime();
+		Process p;
+		String execStr = null;
+		try{
+			switch(os_type){
+			case 0:
+				execStr = "mkdir ";
+				break;
+			case 1:
+				execStr = "mkdir ";
+				break;
+			case 2:
+				execStr = "mkdir ";
+				break;
+			default:
+				execStr = "mkdir ";
+				break;
+			}
+			String time = "" + System.currentTimeMillis();
+			execStr += time;
+			p = rt.exec(execStr);
+			
+			return time;
+			
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private void findOS(){
+
+		OS = System.getProperty("os.name").toLowerCase();
+		if (isWindows()) {
+			os_type = 0;			
+		} else if (isMac()) {
+			os_type = 1;
+		} else if (isUnix()) {
+			os_type = 2;
+		} else if (isSolaris()) {
+			os_type = 3;
+		} else {
+			os_type = 4;
+		}
+	}
+
+	private static String OS;
+	private int os_type;  
+	private boolean isWindows() {
+		return (OS.indexOf("win") >= 0);
+	}
+	private boolean isMac() {
+		return (OS.indexOf("mac") >= 0);
+	}
+	private boolean isUnix() {
+		return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+	}	
+	private boolean isSolaris() {
+		return (OS.indexOf("sunos") >= 0);
+	}
+
+	private static ArrayList<HashMap<String, String>> parser(String argu){
+		String first_argu="";
+		boolean check = false;
+		ArrayList<HashMap<String, String>> list = new ArrayList<>();
+		HashMap<String, String> map = new HashMap<>();
+		StringTokenizer token = new StringTokenizer(argu, ";");
+		StringTokenizer detail_token;
+		while(token.hasMoreElements()){
+			detail_token = new StringTokenizer(token.nextToken(),":,=");
+			while(detail_token.hasMoreElements()){
+				String key = detail_token.nextElement().toString().trim();
+				if(detail_token.hasMoreElements()){					
+					String value = detail_token.nextElement().toString().trim();
+					if(first_argu.equals(key)){
+						list.add(map);
+						map = new HashMap<>();
+					}
+					if(!check){
+						check = true;
+						first_argu = key;
+					}
+					map.put(key, value);
+				}else{
+					map.put(key, "");
+				}
+			}
+		}
+		list.add(map);		
+		return list;
+	}
+	
+	public void responseForm(HttpExchange xchg, Coconut responseCoconut, String boundary) throws IOException {
+		JSONObject responseJSON = null;
+		
+		responseJSON = responseCoconut.responseData();
+		
+
+		Headers header = xchg.getResponseHeaders();
+		header.add("Content-Type", "application/json");
+		header.set("Access-Control-Allow-Origin", "*");
+		header.set("Access-Control-Allow-Headers", "X-Requested-With");//
+		header.set("Access-Control-Allow-Methods", "POST");
+
+		
+		xchg.sendResponseHeaders(200, responseJSON.toString().length());
+		
+		OutputStream os = xchg.getResponseBody();
+		os.write(responseJSON.toString().getBytes("UTF-8"));
+		os.flush();
+		os.close();
+		xchg.close();
+		
+		System.out.println("\n-----------------------------------------------------------------------\n");
+		CoconutzLog.clear(logCnt);
+	}
+	
+}

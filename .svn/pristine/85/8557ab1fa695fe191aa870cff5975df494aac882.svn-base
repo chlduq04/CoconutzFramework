@@ -1,0 +1,543 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<link rel="stylesheet" type="text/css" href="Document.css" />
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	media="screen" />
+<head>
+<title>Tutorial</title>
+<meta name="Generator" content="EditPlus">
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+</head>
+<!-- Query Setting -->
+<body>
+	<div id="document_frame">
+		<div class="accordion" id="accordion">
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse"
+						data-parent="#accordion0" href="#collapseZero"> Tutorial 0 :
+						Setting </a>
+				</div>
+				<div id="collapseZero" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<div id="accordion-title">Query Setting</div>
+						<div id="accordion-detail">
+							<div>CoconutAPI의 기본 세팅</div>
+							<div>
+								<pre class="prettyprint linenums">
+								<code class="language-java">
+public class CoconutzSetting {
+	/*
+	 * coconut의 query를 숨긴다.
+	 * 각 이름에 맞는 숫자를 서로 다르게 적으면 그 숫자에 맞게 js가 바뀐다.
+	 * hideCode를 false로 하면 쿼리가 그대로 보이고 
+	 * true로 하면 쿼리가 숨겨진다.
+	 */
+	protected boolean hideCode = false;	
+	protected int Cselect = 0;//"select"
+	protected int Cselect_max = 1;//"select_max"
+	protected int Cselect_min = 2;//"select_min"
+	protected int Cselect_sum = 3;//"select_sum"
+	protected int Cfrom = 4;//"from"
+	protected int Cjoin = 5;//"join"
+	protected int Cwhere = 6;//"where"	
+	protected int Cor_where = 7;//"or_where"
+	protected int Cor_where_in = 8;//"or_where_in"
+	protected int Cwhere_not_in = 9;//"wehre_not_in"
+	protected int Cor_where_not_in = 10;//"or_where_not_in"
+	protected int Clike = 11;//"like"
+	protected int Cor_like = 12;//"or_like"
+	protected int Cnot_like = 13;//"not_like"
+	protected int Cor_not_like = 14;//"or_not_like"
+	protected int Cgroup_by = 15;//"group_by"
+	protected int Cdistinct = 16;//"distinct"
+	protected int Chaving = 17;//"having"
+	protected int Cor_having = 18;//"or_having"
+	protected int Corder_by = 19;//"order_by"
+	protected int Climit = 20;//"limit"
+	protected int Cinsert = 21;//"insert"
+	protected int Cdelete = 22;//"delete"
+	protected int Cmax = 23;//"max"
+	protected int Cset = 24;//"set"
+	protected int Cupdate = 25;//"update"
+	protected int Cselect_count = 26;//cselect_count
+}</code></pre>
+							</div>
+							<div>
+								API를 사용하면 Javascript가 자동으로 생성된다.<br /> 자동으로 생성된 스크립트는 쿼리가 보이는
+								상태가 된다.<br /> 이때 hideCode를 true로 바꾸면 코드가 원하는 숫자로 바뀐다.<br />
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Database Setting</div>
+							<div id="accordion-detail">
+								<div>
+									<pre class="prettyprint linenums">
+									<code class="language-java">
+public class CoconutzSetting {
+	/*
+	 * coconut의 database를 설정한다.
+	 * url : 서버의 주소
+	 * hostname : 데이터베이스의 호스트 이름
+	 * username : 데이터베이스의 아이디
+	 * password : 데이터베이스의 비밀번호
+	 * database : 데이터베이스의 DB이름
+	 * */
+	public String url = "http://211.189.127.244:8000/echo";
+	public String usernames = "coconutz";
+	public String hostname = "localhost";
+	public String username = "root";
+	public String password = "coconut";
+	public String database = "coconut";	
+
+	public static String USERID = "";
+	public static String SERVICENAME= "";
+	public static String DAEMONNAME = "";
+}</code></pre>
+								</div>
+								<div>
+									API의 서버에 관한 세팅<br /> 기본적으로 세팅된다.<br />
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse"
+							data-parent="#accordion1" href="#collapseOne"> Tutorial 1 :
+							Function </a>
+					</div>
+					<div id="collapseOne" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<div id="accordion-title">Coconut</div>
+							<div id="accordion-detail">
+								<div>
+									<div>CoconutAPI를 사용하는 일반적인 구조</div>
+									<pre class="prettyprint linenums">
+										<code class="language-java">
+public class testCoconut extends CoconutzHelper{
+	public Coconut _test(CoconutParameter parameter){
+		return super.GET_PAGINATION(parameter);
+	}
+}</code></pre>
+									<div>
+										CoconutAPI를 사용하기 위해서는 CoconutzHelper를 상속받아야한다.<br /> 상속받은 후
+										coconutzAPI를 사용하는 클래스라는 것을 나타내기 위해서 '_'를 붙인다.<br /> 그리고
+										super을 사용하여 원하는 함수를 실행시킨다.<br /> 그러면 자동으로 그 함수에 맞는 Long
+										Poll형태의 ajax,그냥 형태의 ajax,예제로 html이 생성된다.<br />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse"
+							data-parent="#accordion2" href="#collapseTwo"> Tutorial 2 :
+							Helper Class </a>
+					</div>
+					<div id="collapseTwo" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<div id="accordion-title">Captcha</div>
+							<div id="accordion-detail">
+								<pre class="prettyprint linenums">
+									<code class="language-java">
+							</code>
+								</pre>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Createtable</div>
+							<div id="accordion-detail">
+								<div>
+									<div>테이블을 생성하는 기본코드</div>
+									<pre class="prettyprint linenums">
+									<code class="language-java">
+public class TestCoconut extends CoconutzHelper{
+	public TestCoconut(){
+		super(
+				new CoconutzCreateTable().TABLE_START("table4").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END()
+				);
+	}
+}</code></pre>
+									<div>
+										CoconutzCreateTable을 사용하여 테이블을 생성할 수 있다.<br /> TABLE_START()을
+										이용하여 테이블의 이름을 적용시킬 수 있다.<br /> 각 테이블을 생성할 수 있는 함수의 이름에 알맞는
+										파라미터를 넣어 쿼리를 완성시킨다.<br /> TABLE_END()를 이용하여 테이블을 마무리 지을수 있다.<br />
+									</div>
+									<pre class="prettyprint linenums">
+									<code class="language-java">
+public class TestCoconut extends CoconutzHelper{
+	public TestCoconut(){
+		super(
+				new CoconutzCreateTable().TABLE_START("table4").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END()
+				new CoconutzCreateTable().TABLE_START("table5").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END(),
+				new CoconutzCreateTable().TABLE_START("table6").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END(),
+				);
+	}
+}</code></pre>
+									<div>
+										CoconutzCreateTable을 사용하여 테이블을 생성할 수 있다.<br /> TABLE_START()을
+										이용하여 테이블의 이름을 적용시킬 수 있다.<br /> 각 테이블을 생성할 수 있는 함수의 이름에 알맞는
+										파라미터를 넣어 쿼리를 완성시킨다.<br /> TABLE_END()를 이용하여 테이블을 마무리 지을수 있다.<br />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Date</div>
+							<div id="accordion-detail">
+								<pre class="prettyprint linenums">
+									<code class="language-java">
+							</code>
+								</pre>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Directory</div>
+							<div id="accordion-detail">
+							<div>
+							<div>Directory를 이용하여 Directory를 array로 얻을 수 있다.</div>
+								<pre class="prettyprint linenums">
+									<code class="language-java">
+public class TestCoconut extends CoconutzHelper{
+	public Coconut _TestDirectory(CoconutParameter parameter){
+		return super.DIRECTORY_MAP(parameter);
+	}
+}</code></pre>
+							<div></div>
+							</div>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Email</div>
+							<div id="accordion-detail">
+								<pre class="prettyprint linenums">
+									<code class="language-java">
+							</code>
+								</pre>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Number</div>
+							<div id="accordion-detail">
+							<div>
+							<div>Number을 이용하여 용량의 단위를 간단하게 얻을 수 있다.</div>
+								<pre class="prettyprint linenums">
+									<code class="language-java">
+public class TestCoconut extends CoconutzHelper{
+	public TestCoconut(){
+	}
+	public Coconut _TestNumber(CoconutParameter parameter){
+		return super.GET_NUMBER(parameter);
+	}
+}</code></pre>
+									<div></div>
+							</div>
+							<div></div>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Pagination</div>
+							<div id="accordion-detail">
+							<div>
+							<div>Pagenation을 이용하여 기본적인 pagination을 만들 수 있다.</div>
+								<pre class="prettyprint linenums">
+									<code class="language-java">
+public class TestCoconut extends CoconutzHelper{
+	public TestCoconut(){
+	}
+	public Coconut _TestPagenation(CoconutParameter parameter){
+		return super.GET_PAGINATION(parameter);
+	}
+}</code></pre>
+							<div></div>
+							</div>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Table</div>
+							<div id="accordion-detail">
+							<div>
+							<div>Table에 관련된 3가지의 함수를 통하여 세가지의 코드를 얻을 수 있다.</div>
+								<pre class="prettyprint linenums">
+									<code class="language-java">
+public class TestCoconut extends CoconutzHelper{
+	public TestCoconut(){
+	}
+	public Coconut _TestTable(CoconutParameter parameter){
+		return super.GET_TABLE(parameter);
+	}
+	public Coconut _TestUpload(CoconutParameter parameter){
+		return super.UPLOAD_MULTIPART(parameter);
+	}
+	public Coconut _TestView(CoconutParameter parameter){
+		return super.VIEW_TABLE(parameter);
+	}
+}</code></pre>
+								<div>
+									GET_TABLE()를 이용하면 현재 DB에 저장된 코드를 바탕으로 테이블을 생성해 준다.<br/>
+									UPLOAD_MULTIPART()를 이용하면 multipartform을 생성해 준다..<br/>
+									VIEW_TABLE()을 이용하면 Table의 검색 기능을 사용할 수 있다.<br/>
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Typography</div>
+							<div id="accordion-detail">
+							<div>
+							<div></div>
+								<pre class="prettyprint linenums">
+									<code class="language-java">
+public class TestCoconut extends CoconutzHelper{
+	public TestCoconut(){
+	}
+	public Coconut _TestTYPOGRAPHY(CoconutParameter parameter){
+		return super.AUTO_TYPOGRAPHY(parameter);
+	}
+	public Coconut _TestNL2BREXCEPTPRE(CoconutParameter parameter){
+		return super.NL2BREXCEPTPRE(parameter);
+	}
+}</code></pre>
+								<div>
+								AUTO_TYPOGRAPHY()를 이용하여 p테그가 포함된 글을 얻을 수 있다.<br/>
+								NL2BREXCEPTPRE()를 이용하여 p테그가 포함되지 않은 글을 얻을 수 있다.
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">Xml</div>
+							<div id="accordion-detail">
+							<div>
+							<div></div>
+								<pre class="prettyprint linenums"><code class="language-java">
+public class TestCoconut extends CoconutzHelper{
+	public Coconut _TestXML(CoconutParameter parameter){
+		return super.GET_XML(parameter);
+	}
+}</code></pre>
+							</div>
+							</div>
+						</div>
+						<div class="accordion-inner">
+							<div id="accordion-title">CoconutzHelper</div>
+							<div id="accordion-detail">
+								<div>
+								<div>위의 모든 함수들을 한번에 수행할 수 있다.</div>
+									<pre class="prettyprint linenums">
+										<code class="language-java">
+public class mytest4 extends CoconutzHelper{
+	public mytest4() {
+	}
+	public Coconut _testSelect(CoconutParameter parameter){	
+		return super.SELECT(parameter);
+	}
+}</code>
+									</pre>
+								</div>
+								<div>
+								<div>
+								테이블을 생성하면서 동시에 함수를 수행할 수 있다.<br/>
+								테이들을 생성하는 함수를 생성자에 넣는다<br/>
+								</div>
+									<pre class="prettyprint linenums">
+										<code class="language-java">
+public class mytest4 extends CoconutzHelper{
+	public mytest4() {
+		super(
+				new CoconutzCreateTable().TABLE_START("table4").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END(),
+				new CoconutzCreateTable().TABLE_START("table5").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END()
+				);
+	}
+		
+	public Coconut _testQuery(CoconutParameter parameter){
+		return super.QUERY(parameter);
+	}
+	public Coconut _testSelect(CoconutParameter parameter){	
+		return super.SELECT(parameter);
+	}
+	public Coconut _testInsert(CoconutParameter parameter){
+		return super.UPLOAD_TABLE(parameter);
+	}	
+	public Coconut _query(CoconutParameter parameter){
+		return super.SELECT(parameter);
+	}
+	public Coconut _testTable(CoconutParameter parameter){
+		return super.GET_TABLE(parameter);
+	}
+	public Coconut _testPage(CoconutParameter parameter){
+		return super.GET_PAGINATION(parameter);
+	}
+}</code></pre>
+								<div>
+								그러면 테이블의 생성과 함께 그 테이블에 맞는 코드가 자동으로 생성된다.<br/>
+								</div></div>
+								
+								</div>
+								</div>
+								
+							</div>
+						</div>
+
+					<div class="accordion-group">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse"
+								data-parent="#accordion3" href="#collapseThree"> Tutorial 3
+								: Database </a>
+						</div>
+						<div id="collapseThree" class="accordion-body collapse">
+							<div class="accordion-inner">
+								<div id="accordion-title">CoconutzTestHelper</div>
+								<div id="accordion-detail">
+								<div>
+								<div>Database를 이용하기 위해 직접 쿼리를 만들고 그에맞는 코드를 얻을 수 있다.</div>
+									<pre class="prettyprint linenums">
+										<code class="language-java">
+public class mytest4 extends CoconutzHelper{
+	public mytest4() {
+		super.DB("testQuery1", QUERY.SELECT("*").FROM("table4").WHERE("id", "1").OR_WHERE("id", "3").END());
+		super.DB("testQuery2", QUERY.SELECT("*").FROM("table5").END());
+	}
+
+	public Coconut testQuery1(CoconutParameter parameter){
+		return super.DB(parameter);
+	}
+	public Coconut testQuery2(CoconutParameter parameter){
+		return super.DB(parameter);
+	}
+}</code></pre>
+									<div>
+									결과로 testQuery라는 이름의 js파일이 생성된다.<br/><br/>
+									만들어지는 코드는 다음과 같다<br/>
+									</div>
+									</div>
+									<div>
+									<pre class="prettyprint linenums">
+										<code class="language-java">
+function mytest4_testQuery1(name){
+$.ajax({
+type : 'POST',
+url : 'http://211.189.127.244:8000/echo',
+cache : false,
+dataType : 'json',
+data : '{"user" : "root", "class" : "mytest4", "function" : "testQuery1", "parameter" : [{"param1":"*","function":"select"},{"param1":"table4","function":"from"},{"param1":"id","param2":"1","function":"where"},{"param1":"id","param2":"3","function":"or_where"}] }',
+success : function(jdata){
+document.getElementById(name).innerHTML = jdata.data.value;
+},
+error : function(xhr,status,e){
+alert('Error');
+},
+});
+};
+mytest4_testQuery1('testQuery1');</code></pre>
+									<div>
+									사용자가 적은 쿼리가 실행되고 그 이름은 class의 이름에 _를 붙이고 함수 이름을 붙인 상태로 만들어진다.<br/>
+									함수가 자동으로 실행되게 나오며 include하게 되면 함수 이름에 넣을 수 있게 끔 만들어 진다.<br/>
+									</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="accordion-group">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse"
+								data-parent="#accordion4" href="#collapseFour"> Tutorial 4 :
+								User Function </a>
+						</div>
+						<div id="collapseFour" class="accordion-body collapse">
+							<div class="accordion-inner">
+								<div id="accordion-title">CoconutzHelper</div>
+								<div id="accordion-detail">
+								<div>
+								<div>사용자가 원하는 함수를 생성할 수 있다.</div>
+									<pre class="prettyprint linenums">
+										<code class="language-java">
+public class mytest9 extends CoconutzHelper{
+	public mytest9(){
+		Branch("Plus","A,B");
+	}
+	public Coconut Plus(CoconutParameter parameter){
+		int A = Integer.parseInt( parameter.get("A") );
+		int B = Integer.parseInt( parameter.get("B") );
+		int C = A + B;
+		int D = A - B;
+		Coconut coconut = new Coconut();
+		coconut.put("Plus", C);
+		coconut.put("Minus", D);
+		return coconut;
+	}
+}</code></pre>
+								<div>위의 코드의 결과는 아래와 같다. </div>
+									</div>
+									
+								<div>
+									<pre class="prettyprint linenums">
+										<code class="language-java">
+function mytest9_Plus(name){
+$.ajax({
+type : 'POST',
+url : 'http://211.189.127.244:8000/echo',
+cache : false,
+dataType : 'json',
+data : '{"user" : "root", "class" : "mytest9", "function" : "Plus", "parameter" : {"A":1,"B":2} }',
+success : function(jdata){
+document.getElementById(name).innerHTML = jdata.data.value;
+},
+error : function(xhr,status,e){
+alert('Error');
+},
+});
+};
+mytest9_Plus('a');</code></pre>
+								<div>
+								코드는 결과로 각 수행결과를 반환한다.<br/>
+								</div>
+									</div>
+									
+								<div>
+									<pre class="prettyprint linenums">
+										<code class="language-java">
+{"result":"success","data":{"Plus":3,"Minus":-1}}</code></pre>
+								</div>
+								<div>사용자는 원하는 값을 얻을 수 있다.</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="accordion-group">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse"
+								data-parent="#accordion5" href="#collapseFive"> Tutorial 5 :
+								Other </a>
+						</div>
+						<div id="collapseFive" class="accordion-body collapse">
+							<div class="accordion-inner">
+								<div id="accordion-title">CoconutzCLI</div>
+								<div id="accordion-detail">
+									<pre class="prettyprint linenums">
+										<code class="language-java"></code>
+									</pre>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+			<script src="bootstrap/js/bootstrap.min.js"></script>
+			<script
+				src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+</body>
+</html>
+
+

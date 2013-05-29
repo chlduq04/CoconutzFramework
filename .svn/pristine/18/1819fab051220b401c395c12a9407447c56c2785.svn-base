@@ -1,0 +1,63 @@
+package com.coconutz.HelperRef;
+
+import coconutz.ForParser.CoconutzAjax;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzQuery;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+/*********************************************************************************************
+* @brief NUMBER을 이용하여 단위룰 만든다.
+* @file  CoconutzNumber.java
+* @author  CHOIUNGYEOP
+* @date  2013. 5.
+*********************************************************************************************/
+public class CoconutzNumber extends CoconutzAjax{
+	private CoconutzCLI cli;
+	private volatile static CoconutzNumber instance = null;
+	/*******************************************************************************************************
+	 * @brief CoconutzNumber의 생성자로 cli를 생성한다.
+	 * @method CoconutzNumber
+	 * @file CoconutzNumber.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public CoconutzNumber(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/number");
+	}
+	/*******************************************************************************************************
+	 * @brief 인스턴스를 반환한다. 생성되지 않았다면 생성하여 반환한다.
+	 * @method getInstance
+	 * @file CoconutzNumber.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public static CoconutzNumber getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzNumber.class){
+				if (instance == null) {
+					instance = new CoconutzNumber();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+			
+		}
+		return instance;
+	}
+	/*******************************************************************************************************
+	 * @brief 숫자를 등록하면 숫자를 단위로 바꾸어 반환한다.
+	 * @method getNumber
+	 * @file CoconutzNumber.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getNumber(CoconutParameter cp){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/number/getNumber\t"+ cp.toString()); }
+		return new Coconut(cli.console("getNumber", cp));
+	}
+}

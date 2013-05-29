@@ -1,0 +1,29 @@
+package com.newService;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzFormBase;
+import com.coconutz.HelperRef.CoconutzCreateTable;
+import com.coconutz.HelperRef.CoconutzTable;
+import com.coconutz.HelperRef.CoconutzTesthelper;
+
+public class mytest5 extends CoconutzTesthelper{
+	public mytest5(){
+	}
+	public Coconut _testSelect_Max(CoconutParameter parameter){
+		return super.SELECT_MAX(parameter);		
+	}
+	public Coconut _testLike(CoconutParameter parameter){
+		return super.LIKE(parameter);
+	}
+	public Coconut _testOrder(CoconutParameter pararmeter){
+		return super.ORDER_BY(pararmeter);
+	}	
+	public Coconut _testJoin(CoconutParameter parameter){
+		return super.JOIN(parameter);
+	}
+	
+	//	public Coconut _createTable(){
+//		table.getTableFromDB(parameter);
+//	}
+}

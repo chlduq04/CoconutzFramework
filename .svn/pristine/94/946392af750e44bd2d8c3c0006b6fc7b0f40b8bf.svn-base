@@ -1,0 +1,12 @@
+package com.newService;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.HelperRef.CoconutzPagination;
+
+public class mytest10 {
+	public Coconut _test(CoconutParameter parameter){
+		CoconutzPagination page = new CoconutzPagination();
+		return page.getPagination(parameter);
+	}
+}

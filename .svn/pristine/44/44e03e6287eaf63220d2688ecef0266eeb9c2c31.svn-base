@@ -1,0 +1,116 @@
+package com.coconutz.HelperRef;
+
+import org.json.JSONObject;
+
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+
+public class CoconutzDate {
+	private CoconutzCLI cli;
+	private volatile static CoconutzDate instance = null;
+
+	
+	private CoconutzDate(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/date");
+	}
+	
+	public static CoconutzDate getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzDate.class){
+				if (instance == null) {
+					instance = new CoconutzDate();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+	
+	
+	
+	
+	public JSONObject getNow(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getNow\t"+ parameter.toString()); }		
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getNow", parameter);
+		return cli.console("getNow", parameter);
+	}
+	
+	public JSONObject getMdate(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getMdate\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getMdate", parameter);
+		return cli.console("getMdate", parameter);
+	}
+	
+	public JSONObject getStandardDate(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getStandardDate\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getStandardDate", parameter);
+		return cli.console("getStandardDate", parameter);
+	}
+	
+	public JSONObject getLocalToGMT(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getLocalToGMT\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getLocalToGMT", parameter);
+		return cli.console("getLocalToGMT", parameter);
+	}
+	
+	public JSONObject getGMTToLocal(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getGMTToLocal\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getGMTToLocal", parameter);
+		return cli.console("getGMTToLocal", parameter);
+	}
+	
+	public JSONObject getMysqlToUnix(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getMysqlToUnix\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getMysqlToUnix", parameter);
+		return cli.console("getMysqlToUnix", parameter);
+	}
+	
+	public JSONObject getUnixToHuman(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getUnixToHuman\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getUnixToHuman", parameter);
+		return cli.console("getUnixToHuman", parameter);
+	}
+	
+	public JSONObject getHumanToUnix(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getHumanToUnix\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getHumanToUnix", parameter);
+		return cli.console("getHumanToUnix", parameter);
+	}
+	
+	public JSONObject getTimespan(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimespan\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getTimespan", parameter);
+		return cli.console("getTimespan", parameter);
+	}
+	
+	public JSONObject getDaysInMonth(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getDaysInMonth\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getDaysInMonth", parameter);
+		return cli.console("getDaysInMonth", parameter);
+	}
+	
+	public JSONObject getTimezones(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimezones\t"+ parameter.toString()); }
+//		String result = excutePHP.excute("/coconutzAPI_helper/date/getTimezones", parameter);
+		return cli.console("getTimezones", parameter);
+	}
+	
+	public JSONObject getTimezoneMenu(CoconutParameter parameter)
+	{
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimezoneMenu\t"+ parameter.toString()); }
+		return cli.console("getTimezoneMenu", parameter);
+	}
+}

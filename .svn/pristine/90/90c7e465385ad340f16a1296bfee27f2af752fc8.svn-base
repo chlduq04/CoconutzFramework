@@ -1,0 +1,64 @@
+package com.coconutz;
+
+import java.util.Hashtable;
+
+import org.json.JSONObject;
+
+
+public class Coconut<T> {
+	
+	private T value;
+	private String returnType;
+
+	public Coconut( T obj){
+		value = obj;
+		setReturnType("json");
+	}
+
+	public String getReturnType() {
+		return returnType;
+	}
+
+	public void setReturnType(String returnType) {
+		this.returnType = returnType;
+	}
+	
+	public String getString(){
+		return value.toString();
+	}
+	
+	public T value(){
+		return value;
+	}
+	
+	static public JSONObject responseData(Coconut coconut)
+	{
+		JSONObject retData = new JSONObject();
+//
+//		try {
+//			switch (coconut.type())
+//			{
+//			case "boolean":
+//				retData.put("data", (boolean) coconut.value());
+//				break;
+//			case "String":
+//				retData.put("data", (String) coconut.value());
+//				break;
+//			case "int":
+//				retData.put("data", (int) coconut.value());
+//				break;
+//			case "JSONObject":
+//				retData = (JSONObject) coconut.value();
+//				break;
+//			case "JSONArray":
+//				break;
+//			}
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		return retData;
+	}
+
+}

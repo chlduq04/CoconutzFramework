@@ -1,0 +1,20 @@
+function polling(name){
+(function poll(){
+$.ajax({
+type : 'POST',
+url : 'http://211.189.127.244:8000/echo',
+cache : false,
+dataType : 'json',
+data : '{"user" : "root", "class" : "mytest4", "function" : "testQuery2", "parameter" : [{"param1":"*","function":"select"},{"param1":"table5","function":"from"}] }',
+success : function(jdata){
+document.getElementById(name).innerHTML = jdata
+},
+error : function(xhr,status,e){
+alert('Error');
+},
+complete : poll,
+timeout : 70000
+});
+})();
+};
+

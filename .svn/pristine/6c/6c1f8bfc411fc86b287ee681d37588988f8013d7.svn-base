@@ -1,0 +1,79 @@
+package com.coconutz.HelperRef;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import coconutz.ForParser.CoconutzAjax;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzQuery;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+/*********************************************************************************************
+* @brief  Captcha를 만들 수 있는 함수를 제공한다.
+* @file  CoconutzCaptcha.java
+* @author  LEEJEONGSUB
+* @date  2013. 5.
+*********************************************************************************************/
+public class CoconutzCaptcha extends CoconutzAjax{
+	private CoconutzCLI cli;
+	private volatile static CoconutzCaptcha instance = null;
+	/*******************************************************************************************************
+	 * @brief CoconutzCaptcha의 생성자 jsonarray를 받는다
+	 * @method CoconutzCaptcha
+	 * @file CoconutzCaptcha.java
+	 * @author LEEJEONGSUB
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public CoconutzCaptcha(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/captcha");
+	}
+	/*******************************************************************************************************
+	 * @brief instance를 반환한다.
+	 * @method getInstance
+	 * @file CoconutzCaptcha.java
+	 * @author LEEJEONGSUB
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public static CoconutzCaptcha getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzCaptcha.class){
+				if (instance == null) {
+					instance = new CoconutzCaptcha();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+			
+		}
+		return instance;
+	}
+	/*******************************************************************************************************
+	 * @brief cli를 이용해 captcha를 실행시킨다.
+	 * @method getCaptcha
+	 * @file CoconutzCaptcha.java
+	 * @author LEEJEONGSUB
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getCaptcha(CoconutParameter cp){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/captcha/getCaptcha\t"+ cp.toString()); }
+		return new Coconut(cli.console("getCaptcha", cp));
+	}
+	/*******************************************************************************************************
+	 * @brief cli를 이용해 captcha를 실행시킨다.
+	 * @method getFormCaptcha
+	 * @file CoconutzCaptcha.java
+	 * @author LEEJEONGSUB
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getFormCaptcha(CoconutParameter cp){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/captcha/getFormCaptcha\t"+ cp.toString()); }		
+		return new Coconut(cli.console("getFormCaptcha", cp));
+	}
+
+}

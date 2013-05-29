@@ -1,0 +1,367 @@
+package com.coconutz.HelperRef;
+
+import java.io.File;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.swing.text.html.FormView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import coconutz.ForParser.CoconutzAjax;
+import coconutz.ForParser.CoconutzHtmlParser;
+import coconutz.ForParser.CoconutzMakeAjax;
+import coconutz.ForParser.CoconutzParser;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzDataBase;
+import com.coconutz.CoconutzFormBase;
+import com.coconutz.CoconutzQuery;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+import com.coconutz.DriverRef.DB.CoconutzDB;
+
+public class CoconutzTesthelper extends CoconutzAjax{
+	public CoconutzQuery QUERY = new CoconutzQuery();
+	public CoconutzCreateTable table = new CoconutzCreateTable();
+	protected CoconutzCLI CLI_HELPER;
+	public CoconutzCLI CLI_DB;
+	private String ClassName;
+	private CoconutzCaptcha CAPTCHA;
+	protected CoconutzMakeAjax AJAX = new CoconutzMakeAjax();
+
+	private CoconutzTable TABLE =  new CoconutzTable();
+	private CoconutzPagination PAGE = new CoconutzPagination();
+	private CoconutzDataBase DATABASE = new CoconutzDataBase();
+	private CoconutzFormBase FORMBASE = new CoconutzFormBase();
+	private CoconutzTypography TYPOGRAPHY = new CoconutzTypography();
+	private CoconutzXml XML = new CoconutzXml();
+	private CoconutzNumber NUMBER = new CoconutzNumber();
+	private CoconutzDirectory DIRECTORY = new CoconutzDirectory();
+	private StringBuffer script = new StringBuffer();
+
+	public CoconutzTesthelper() {
+		CLI_HELPER = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/testhelper");
+		CLI_DB = new CoconutzCLI("../../../index.php", "coconutz_", "/coconutAPI_DB/DB");		
+		ClassName = this.getClass().getSimpleName();
+		Hashtable<String, String> table = new Hashtable<>();
+		TableSetting(table);
+		Hashtable<String, String> divtable = new Hashtable<>();
+		divtable.put("insertTable", "");
+		divtable.put("deleteTable", " ");
+		CoconutzParser parser = new CoconutzParser();
+		if(parser.parseString(new File("").getAbsolutePath()+"/src/"+ClassName+".java")){
+			Hashtable<String, String> result = parser.getResult();
+			Enumeration<String> functionkey = result.keys();
+	
+			while(functionkey.hasMoreElements()){
+				String funcName = (String) functionkey.nextElement();
+				String funcSuper = (String) result.get(funcName);
+				Enumeration<String> enumerationKey = table.keys();
+				while(enumerationKey.hasMoreElements()){
+					String string = (String) enumerationKey.nextElement();
+					if(string.equals(funcSuper)){
+						getAjax(funcName, table.get(string));
+					}
+				}
+			}
+		}
+	}
+	public CoconutzTesthelper( CoconutzCreateTable ...newTable ) {
+		CLI_HELPER = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/testhelper");
+		CLI_DB = new CoconutzCLI("../../../index.php", "coconutz_", "/coconutAPI_DB/DB");
+		ClassName = this.getClass().getSimpleName();
+		Hashtable<String, String> table = new Hashtable<>();
+		table.put( "QUERY","[]" );
+		table.put( "GET_PAGINATION", "{\"base_url\":\"http://example.com/index.php/test/page/\",\"total_rows\":\"200\",\"per_page\":\"20\"}");
+		CoconutzParser parser = new CoconutzParser();
+		if(parser.parseString(new File("").getAbsolutePath()+"/src/"+ClassName+".java")){
+			Hashtable<String, String> result = parser.getResult();
+			Enumeration<String> functionkey = result.keys();
+			while(functionkey.hasMoreElements()){
+				String funcName = (String) functionkey.nextElement();
+				String funcSuper = (String) result.get(funcName);
+				Enumeration<String> enumerationKey = table.keys();
+				for( CoconutzCreateTable argus : newTable ){
+					TableSetting(table,argus.getTable());
+					if(funcSuper.equals("UPLOAD_TABLE")){
+						FORMBASE.form_open("frmData","", "");
+						for( String argu : argus.namesArray() ){
+							FORMBASE.form_input("name", argu);
+						}
+						FORMBASE.form_close().form_button("id", "submit", "click");
+						super.getJsonHtml(FORMBASE.getForm(),funcName, ClassName ,argus.getTable());
+						super.getJsonPolling(FORMBASE.getForm(),funcName, ClassName,argus.getTable());
+					}else if(funcSuper.equals("UPLOAD_MULTIPART")){
+						FORMBASE.form_open_multipart("frmData","", "");
+						for( String argu : argus.namesArray() ){
+							FORMBASE.form_input("name", argu);
+						}
+						FORMBASE.form_close().form_button("id", "submit", "click");
+						super.getJsonHtml(FORMBASE.getForm(),funcName, ClassName ,argus.getTable());
+						super.getJsonPolling(FORMBASE.getForm(),funcName, ClassName,argus.getTable());
+					}else if(funcSuper.equals("DELETE_TABLE")){
+						FORMBASE.form_button("id", "delete", "delete");
+						super.getJsonJQuery(FORMBASE.getForm(),funcName, ClassName,argus.getTable());
+						super.getJsonPolling(FORMBASE.getForm(),funcName, ClassName,argus.getTable());
+					}else if(funcSuper.equals("VIEW_TABLE")){
+						FORMBASE.form_button("id", "delete", "delete");
+						super.getJsonJQuery(FORMBASE.getForm(),funcName, ClassName,argus.getTable());
+						super.getJsonPolling(FORMBASE.getForm(),funcName, ClassName,argus.getTable());
+					}else{
+						while(enumerationKey.hasMoreElements()){
+							String string = (String) enumerationKey.nextElement();
+							if(string.equals(funcSuper)){
+								getAjax(funcName, table.get(string));
+							}
+						}
+					}					
+				}
+
+			}
+		}
+
+	}
+	protected void HTML(String name){
+		CoconutzHtmlParser parse = new CoconutzHtmlParser();
+		parse.ReadLine(name, script);
+	}
+	private void TableSetting(Hashtable<String, String> table){
+		if(!hideCode){
+			table.put( "QUERY","[]" );
+			table.put( "GET_PAGINATION", "{\"base_url\":\"http://example.com/index.php/test/page/\",\"total_rows\":\"200\",\"per_page\":\"20\"}" );
+			table.put( "GET_TABLE", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"coconutz_db\",\"function\":\"from\"}]" );
+			table.put( "SELECT", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"coconutz_db\",\"function\":\"from\"}]" );
+			table.put( "SELECT_MAX", "[{\"param1\":\"id\",\"function\":\"select_max\"},{\"param1\":\"coconutz_db\",\"function\":\"from\"}]" );
+			table.put( "SELECT_MIN", "[{\"param1\":\"id\",\"function\":\"select_min\"},{\"param1\":\"coconutz_db\",\"function\":\"from\"}]" );
+			table.put( "JOIN", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"coconutz_db\",\"function\":\"from\"},{\"param1\":\"coconutz_db\",\"function\":\"join\"}]" );
+			table.put( "WHERE", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"coconutz_db\",\"function\":\"from\"},{\"param1\":\"id\",\"param2\":\"choi\",\"function\":\"where\"}]" );
+			table.put( "LIKE", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"coconutz_db\",\"function\":\"from\"},{\"param1\":\"id\",\"param2\":\"1\",\"param3\":\"both\",\"function\":\"like\"}]" );
+			table.put( "ORDER_BY", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"coconutz_db\",\"function\":\"from\"},{\"param1\":\"id\",\"param2\":\"1\",\"function\":\"order_by\"}]" );
+
+			table.put( "AUTO_TYPOGRAPHY", "{ \"typography\" : \"hello\" }" );
+			table.put( "NL2BREXCEPTPRE", "{ \"typography\" : \"hello\" }" );
+			table.put( "DIRECTORY_MAP", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table1\",\"function\":\"from\"}]" );
+			table.put( "GET_NUMBER", "{ \"num\" : \"1024\" }" );
+			table.put( "GET_XML",  "{ \"xml\" : \"<100&200>\" }"  );
+
+		}else{
+			table.put( "QUERY","[]" );
+			table.put( "GET_PAGINATION", "{\"base_url\":\"http://example.com/index.php/test/page/\",\"total_rows\":\"200\",\"per_page\":\"20\"}" );
+			table.put( "GET_TABLE", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\"coconutz_db\",\"function\":\""+Cfrom+"\"}]" );
+			table.put( "SELECT", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\"coconutz_db\",\"function\":\""+Cfrom+"\"}]" );
+			table.put( "SELECT_MAX", "[{\"param1\":\"id\",\"function\":\""+Cselect_max+"\"},{\"param1\":\"coconutz_db\",\"function\":\""+Cfrom+"\"}]" );
+			table.put( "SELECT_MIN", "[{\"param1\":\"id\",\"function\":\""+Cselect_min+"\"},{\"param1\":\"coconutz_db\",\"function\":\""+Cfrom+"\"}]" );
+			table.put( "JOIN", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\"coconutz_db\",\"function\":\""+Cfrom+"\"},{\"param1\":\"coconutz_db\",\"function\":\"join\"}]" );
+			table.put( "WHERE", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\"coconutz_db\",\"function\":\""+Cfrom+"\"},{\"param1\":\"id\",\"param2\":\"choi\",\"function\":\""+Cwhere+"\"}]" );
+			table.put( "LIKE", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\"coconutz_db\",\"function\":\""+Cfrom+"\"},{\"param1\":\"id\",\"param2\":\"1\",\"param3\":\"both\",\"function\":\"like\"}]" );
+			table.put( "ORDER_BY", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\"coconutz_db\",\"function\":\""+Cfrom+"\"},{\"param1\":\"id\",\"param2\":\"1\",\"function\":\"order_by\"}]" );			
+
+			table.put( "AUTO_TYPOGRAPHY", "{ \"typography\" : \"hello\" }" );
+			table.put( "NL2BREXCEPTPRE", "{ \"typography\" : \"hello\" }" );
+			table.put( "DIRECTORY_MAP", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table1\",\"function\":\"from\"}]" );
+			table.put( "GET_NUMBER", "{ \"num\" : \"1024\" }" );
+			table.put( "GET_XML", "{ \"xml\" : \"<100&200>\" }" );
+		}
+	}
+	private void TableSetting(Hashtable<String, String> table, String table_name){
+		if(!hideCode){
+			table.put( "GET_TABLE", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\""+table_name+"\",\"function\":\"from\"}]" );
+			table.put( "SELECT", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\""+table_name+"\",\"function\":\"from\"}]" );
+			table.put( "SELECT_MAX", "[{\"param1\":\"id\",\"function\":\"select_max\"},{\"param1\":\""+table_name+"\",\"function\":\"from\"}]" );
+			table.put( "SELECT_MIN", "[{\"param1\":\"id\",\"function\":\"select\"},{\"param1\":\""+table_name+"\",\"function\":\"from\"}]" );
+			table.put( "JOIN", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\""+table_name+"\",\"function\":\"from\"},{\"param1\":\"coconutz_db\",\"function\":\"join\"}]" );
+			table.put( "WHERE", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\""+table_name+"\",\"function\":\"from\"},{\"param1\":\"id\",\"param2\":\"choi\",\"function\":\"where\"}]" );
+			table.put( "LIKE", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\""+table_name+"\",\"function\":\"from\"},{\"param1\":\"id\",\"param2\":\"1\",\"param3\":\"both\",\"function\":\"like\"}]" );
+			table.put( "ORDER_BY", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\""+table_name+"\",\"function\":\"from\"},{\"param1\":\"id\",\"param2\":\"1\",\"function\":\"order_by\"}]" );			
+
+			table.put( "AUTO_TYPOGRAPHY", "{ \"typography\" : \"hello\" }" );
+			table.put( "NL2BREXCEPTPRE", "{ \"typography\" : \"hello\" }" );
+			table.put( "DIRECTORY_MAP", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table1\",\"function\":\"from\"}]" );
+			table.put( "GET_NUMBER", "{ \"num\" : \"1024\" }" );
+			table.put( "GET_XML", "{ \"xml\" : \"<100&200>\" }" );
+
+		}else{
+			table.put( "GET_TABLE", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\""+table_name+"\",\"function\":\""+Cfrom+"\"}]" );
+			table.put( "SELECT", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\""+table_name+"\",\"function\":\""+Cfrom+"\"}]" );
+			table.put( "SELECT_MAX", "[{\"param1\":\"id\",\"function\":\""+Cselect_max+"\"},{\"param1\":\""+table_name+"\",\"function\":\""+Cfrom+"\"}]" );
+			table.put( "SELECT_MIN", "[{\"param1\":\"id\",\"function\":\""+Cselect+"\"},{\"param1\":\""+table_name+"\",\"function\":\""+Cfrom+"\"}]" );
+			table.put( "JOIN", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\""+table_name+"\",\"function\":\""+Cfrom+"\"},{\"param1\":\"coconutz_db\",\"function\":\"join\"}]" );
+			table.put( "WHERE", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\""+table_name+"\",\"function\":\""+Cfrom+"\"},{\"param1\":\"id\",\"param2\":\"choi\",\"function\":\""+Cwhere+"\"}]" );
+			table.put( "LIKE", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\""+table_name+"\",\"function\":\""+Cfrom+"\"},{\"param1\":\"id\",\"param2\":\"1\",\"param3\":\"both\",\"function\":\"like\"}]" );
+			table.put( "ORDER_BY", "[{\"param1\":\"*\",\"function\":\""+Cselect+"\"},{\"param1\":\""+table_name+"\",\"function\":\""+Cfrom+"\"},{\"param1\":\"id\",\"param2\":\"1\",\"function\":\"order_by\"}]" );						
+
+			table.put( "AUTO_TYPOGRAPHY", "{ \"typography\" : \"hello\" }" );
+			table.put( "NL2BREXCEPTPRE", "{ \"typography\" : \"hello\" }" );
+			table.put( "DIRECTORY_MAP", "[{\"param1\":\"*\",\"function\":\"select\"},{\"param1\":\"table1\",\"function\":\"from\"}]" );
+			table.put( "GET_NUMBER", "{ \"num\" : \"1024\" }" );
+			table.put( "GET_XML", "{ \"xml\" : \"<100&200>\" }" );		
+		}
+	}
+	
+	
+	protected void Branch(String name,String param){
+		CoconutAjax("","html",ClassName+"_"+name, AJAX.SCRIPT(ClassName, name, param, ""));
+		CoconutAjax("js_","js",ClassName+"_"+name, AJAX.SCRIPT(ClassName, name, param, ""));
+		CoconutAjax("poll_","js",ClassName+"_"+name, AJAX.SCRIPT(ClassName, name, param, ""));
+	}
+	protected void DB(String name, String param){
+		CoconutAjax("","html",ClassName+"_"+name, AJAX.SCRIPT_INSERT_DATA(ClassName, name, param, ""));
+		CoconutAjax("js_","js",ClassName+"_"+name, AJAX.SCRIPT_INSERT_DATA(ClassName, name, param, ""));
+		CoconutAjax("poll_","js",ClassName+"_"+name, AJAX.SCRIPT_INSERT_DATA(ClassName, name, param, ""));
+	}		
+
+	protected void Branch( String name,String param, String id ){
+		CoconutAjax("","html",ClassName+"_"+name, AJAX.SCRIPT(ClassName, name, param, id));
+		CoconutAjax("js_","js",ClassName+"_"+name, AJAX.SCRIPT(ClassName, name, param, id));
+		CoconutAjax("poll_","js",ClassName+"_"+name, AJAX.SCRIPT(ClassName, name, param, id));
+	}
+	protected void DB( String name, String param, String id ){
+		CoconutAjax("","html",ClassName+"_"+name, AJAX.SCRIPT_INSERT_DATA(ClassName, name, param, id));
+		CoconutAjax("js_","js",ClassName+"_"+name, AJAX.SCRIPT_INSERT_DATA(ClassName, name, param, id));
+		CoconutAjax("poll_","js",ClassName+"_"+name, AJAX.SCRIPT_INSERT_DATA(ClassName, name, param, id));
+	}		
+
+	protected Coconut DB(CoconutParameter cp){
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}
+
+
+	private void getAjax( String file_name, CoconutzQuery query2 ){
+		getJQuery(file_name, ClassName ,query2.getQuery().toString());
+	}
+	private void getAjax( String file_name, String json ){
+		getJs(file_name, ClassName ,json);
+		getPoll(file_name, ClassName, json);
+		getJQuery(file_name, ClassName ,json); 
+	}
+	protected Coconut SELECT(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}	
+	protected Coconut SELECT_MAX(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}	
+	protected Coconut SELECT_MIN(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}	
+	protected Coconut JOIN(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}	
+	protected Coconut WHERE(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}	
+	protected Coconut LIKE(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}	
+	protected Coconut ORDER_BY(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}	
+	protected Coconut QUERY(CoconutParameter cp){
+		if (G.DEBUG) { G.debugPrint( cp.toString()); }
+		try {
+			return new Coconut(CLI_DB.console("query", new CoconutParameter(new CoconutzDataBase(cp.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(CLI_DB.console("query", cp ));		
+		}
+	}	
+	public Coconut GETTEST(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/testhelper/getTest\t"+ parameter.getEncodingParam()); }		
+		return new Coconut(CLI_HELPER.console("getTest", parameter));
+	}
+	public Coconut SETTEST(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/testhelper/setTest\t"+ parameter.getEncodingParam()); }		
+		return new Coconut(CLI_HELPER.console("setTest", parameter));
+	}
+
+	public Coconut UPLOAD_TABLE(CoconutParameter parameter){
+		return TABLE.Insert(parameter);
+	}
+	public Coconut UPLOAD_MULTIPART(CoconutParameter parameter){
+		return TABLE.InsertFile(parameter);
+	}
+	
+	public Coconut VIEW_TABLE(CoconutParameter parameter){
+		return TABLE.View(parameter);		
+	}
+	public Coconut GET_TABLE(CoconutParameter parameter){
+		return TABLE.getTableFromDB(parameter);
+	}
+	public Coconut TABLE_TEST(CoconutParameter parameter){
+		return TABLE.getTest(parameter);		
+	}
+	
+	public Coconut GET_PAGINATION(CoconutParameter parameter){
+		return PAGE.getPagination(parameter);
+	}
+	
+	public Coconut AUTO_TYPOGRAPHY(CoconutParameter parameter){
+		return TYPOGRAPHY.autoTypography(parameter);
+	}
+	public Coconut NL2BREXCEPTPRE(CoconutParameter parameter){
+		return TYPOGRAPHY.nl2brExceptPre(parameter);
+	}
+	
+	public Coconut DIRECTORY_MAP(CoconutParameter parameter){
+		return DIRECTORY.directoryMap(parameter);		
+	}
+	
+	public Coconut GET_NUMBER(CoconutParameter parameter){
+		return NUMBER.getNumber(parameter);
+	}
+	
+	public Coconut GET_XML(CoconutParameter parameter){
+		return XML.getXml(parameter);
+	}
+}

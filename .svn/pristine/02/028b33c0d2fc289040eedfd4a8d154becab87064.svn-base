@@ -1,0 +1,31 @@
+package com.newService;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzFormBase;
+import com.coconutz.HelperRef.CoconutzCreateTable;
+import com.coconutz.HelperRef.CoconutzTable;
+import com.coconutz.HelperRef.CoconutzTesthelper;
+
+public class mytest5 extends CoconutzTesthelper{
+	public mytest5(){
+		super(
+				CREATETABLE.TABLE_START("table5").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END(), 
+				CREATETABLE.TABLE_START("table6").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END(),
+				CREATETABLE.TABLE_START("table7").INT("id", 0).AUTO_INCREMENT().TEXT("type").TEXT("value").TABLE_END()
+				);
+	}
+
+	public Coconut _testTable(CoconutParameter parameter){
+		return super.getTable(parameter);
+	}	
+	public Coconut _testInsert(CoconutParameter parameter){
+		return super.insertTable(parameter);
+	}
+
+	
+	
+	//	public Coconut _createTable(){
+//		table.getTableFromDB(parameter);
+//	}
+}

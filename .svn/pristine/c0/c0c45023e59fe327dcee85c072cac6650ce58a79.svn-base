@@ -1,0 +1,17 @@
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+function insert(name){
+$.ajax({
+type : 'POST',
+url : 'http://211.189.127.244:8000/echo',
+cache : false,
+dataType : 'json',
+data : '{"user" : "root", "class" : "mytest9", "function" : "Minus", "parameter" : {"A":1,"B":2} }',
+success : function(jdata){
+document.getElementById(name).innerHTML = jdata
+},
+error : function(xhr,status,e){
+alert('Error');
+},
+});
+};
+

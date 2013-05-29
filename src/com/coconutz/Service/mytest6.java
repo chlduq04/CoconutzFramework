@@ -1,0 +1,14 @@
+package com.coconutz.Service;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.HelperRef.CoconutzHelper;
+
+public class mytest6 extends CoconutzHelper{
+	public mytest6(){
+		
+	}
+	public Coconut _testPage(CoconutParameter parameter){
+		return super.GET_PAGINATION(parameter);
+	}
+}

@@ -7,10 +7,9 @@ import java.util.StringTokenizer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import coconutz.ForParser.CoconutzSetting;
-
 import com.coconutz.HelperRef.CoconutzCaptcha;
+import com.coconutz.Service.CoconutzSetting;
+
 public class CoconutzDataBase extends CoconutzSetting{
 	private volatile static CoconutzDataBase instance = null;
 	private StringBuffer query;
@@ -72,19 +71,39 @@ public class CoconutzDataBase extends CoconutzSetting{
 					select(k.get("param1").toString());
 					break;
 				case "select_max":
-					select_max(k.get("param1").toString(),k.get("param2").toString());
+					if(k.has("param2"))
+						select_max(k.get("param1").toString(),k.get("param2").toString());
+					else
+						select_max(k.get("param1").toString());
 					break;
 				case "select_min":
-					select_min(k.get("param1").toString(),k.get("param2").toString());
+					if(k.has("param2"))
+						select_min(k.get("param1").toString(),k.get("param2").toString());
+					else
+						select_min(k.get("param1").toString());
 					break;
 				case "select_sum":
-					select_sum(k.get("param1").toString(),k.get("param2").toString());
+					if(k.has("param2"))
+						select_sum(k.get("param1").toString(),k.get("param2").toString());
+					else
+						select_sum(k.get("param1").toString());
+					break;
+				case "select_count":
+					if(k.has("param2"))
+						select_count(k.get("param1").toString(),k.get("param2").toString());
+					else
+						select_count(k.get("param1").toString());
 					break;
 				case "from":
 					from(k.get("param1").toString());
 					break;
 				case "join":
-					join(k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
+					if(k.has("param3"))
+						join(k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
+					else if(k.has("param2"))
+						join(k.get("param1").toString(),k.get("param2").toString());
+					else 
+						join(k.get("param1").toString());
 					break;
 				case "where":
 					where(where,k.get("param1").toString(),k.get("param2").toString());
@@ -107,7 +126,10 @@ public class CoconutzDataBase extends CoconutzSetting{
 					where = false;
 					break;
 				case "like":
-					like(like,k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
+					if(k.has("param3"))
+						like(like,k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());	
+					else
+						like(like,k.get("param1").toString(),k.get("param2").toString());
 					like = false;
 					break;
 				case "or_like":
@@ -138,7 +160,10 @@ public class CoconutzDataBase extends CoconutzSetting{
 					order_by(k.get("param1").toString(), k.get("param2").toString() );
 					break;
 				case "limit":
-					limit(Integer.parseInt(k.get("param1").toString()), Integer.parseInt(k.get("param2").toString()));
+					if(k.has("param2"))
+						limit(Integer.parseInt(k.get("param1").toString()), Integer.parseInt(k.get("param2").toString()));
+					else
+						limit(Integer.parseInt(k.get("param1").toString()));
 					break;
 				case "insert":
 					insert(k.get("param1").toString(), k.get("param2").toString(), k.get("param3").toString());
@@ -149,92 +174,123 @@ public class CoconutzDataBase extends CoconutzSetting{
 				case "max":
 					max(k.get("param1").toString());
 					break;
+				case "set":
+					set(k.get("param1").toString());
+					break;
 				}
 			}			
-		}
-		else{
+		}else{
+			System.out.println("this code is param");
 			for(int i=0;i<m.length();i++){
 				JSONObject k = m.getJSONObject(i);	
 				String findString = k.get("function").toString();
-				if(findString.equals(Corder_by)){
+				System.out.println(findString);
+				if(findString.equals(""+Corder_by)){
 					order_by(k.get("param1").toString(), k.get("param2").toString() );
 				}
-				else if(findString.equals(Cselect)){
+				else if(findString.equals(""+Cselect)){
 					select(k.get("param1").toString());					
 				}
-				else if(findString.equals(Cselect_max)){
-					select_max(k.get("param1").toString(),k.get("param2").toString());
+				else if(findString.equals(""+Cselect_max)){
+					if(k.has("param2"))
+						select_max(k.get("param1").toString(),k.get("param2").toString());
+					else
+						select_max(k.get("param1").toString());
 				}
-				else if(findString.equals(Cselect_min)){
-					select_min(k.get("param1").toString(),k.get("param2").toString());			
+				else if(findString.equals(""+Cselect_min)){
+					if(k.has("param2"))
+						select_min(k.get("param1").toString(),k.get("param2").toString());			
+					else
+						select_min(k.get("param1").toString());			
 				}
-				else if(findString.equals(Cselect_sum)){
-					select_sum(k.get("param1").toString(),k.get("param2").toString());				
+				else if(findString.equals(""+Cselect_sum)){
+					if(k.has("param2"))
+						select_sum(k.get("param1").toString(),k.get("param2").toString());					
+					else				
+						select_sum(k.get("param1").toString());
 				}
-				else if(findString.equals(Cfrom)){
+				else if(findString.equals(""+Cselect_count)){
+					if(k.has("param2"))
+						select_count(k.get("param1").toString(),k.get("param2").toString());					
+					else				
+						select_count(k.get("param1").toString());
+				}
+				else if(findString.equals(""+Cfrom)){
 					from(k.get("param1").toString());
 				}
-				else if(findString.equals(Cjoin)){
-					join(k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
+				else if(findString.equals(""+Cjoin)){
+					if(k.has("param3"))
+						join(k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
+					else if(k.has("param2"))
+						join(k.get("param1").toString(),k.get("param2").toString());
+					else 
+						join(k.get("param1").toString());
+					break;
 				}
-				else if(findString.equals(Cwhere)){
+				else if(findString.equals(""+Cwhere)){
 					where(where,k.get("param1").toString(),k.get("param2").toString());
 					where = false;
 				}
-				else if(findString.equals(Cor_where)){
+				else if(findString.equals(""+Cor_where)){
 					or_where(where,k.get("param1").toString(),k.get("param2").toString());
 					where = false;
 				}
-				else if(findString.equals(Cor_where_in)){
+				else if(findString.equals(""+Cor_where_in)){
 					or_where_in(where,k.get("param1").toString(),k.get("param2").toString());
 					where = false;
 				}
-				else if(findString.equals(Cwhere_not_in)){
+				else if(findString.equals(""+Cwhere_not_in)){
 					where_not_in(where,k.get("param1").toString(),k.get("param2").toString());
 					where = false;
 				}
-				else if(findString.equals(Cor_where_not_in)){
+				else if(findString.equals(""+Cor_where_not_in)){
 					or_where_not_in(where,k.get("param1").toString(),k.get("param2").toString());
 					where = false;
 				}
-				else if(findString.equals(Clike)){
-					like(like,k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
+				else if(findString.equals(""+Clike)){
+					if(k.has("param3"))
+						like(like,k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());	
+					else
+						like(like,k.get("param1").toString(),k.get("param2").toString());
 				}
-				else if(findString.equals(Cor_like)){
+				else if(findString.equals(""+Cor_like)){
 					or_like(like,k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
 				}
-				else if(findString.equals(Cnot_like)){
+				else if(findString.equals(""+Cnot_like)){
 					not_like(like,k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
 				}
-				else if(findString.equals(Cor_not_like)){
+				else if(findString.equals(""+Cor_not_like)){
 					or_not_like(like,k.get("param1").toString(),k.get("param2").toString(),k.get("param3").toString());
 				}
-				else if(findString.equals(Cgroup_by)){
+				else if(findString.equals(""+Cgroup_by)){
 					group_by(k.get("param1").toString());
 				}
-				else if(findString.equals(Cdistinct)){
+				else if(findString.equals(""+Cdistinct)){
 					distinct();
 				}
-				else if(findString.equals(Chaving)){
+				else if(findString.equals(""+Chaving)){
 					having(k.get("param1").toString(), Boolean.parseBoolean(k.get("param2").toString().trim()) );					
 				}
-				else if(findString.equals(Cor_having)){
+				else if(findString.equals(""+Cor_having)){
 					or_having(k.get("param1").toString(), Boolean.parseBoolean(k.get("param2").toString().trim()) );					
 				}
-				else if(findString.equals(Climit)){
-					limit(Integer.parseInt(k.get("param1").toString()), Integer.parseInt(k.get("param2").toString()));
+				else if(findString.equals(""+Climit)){
+					if(k.has("param2"))
+						limit(Integer.parseInt(k.get("param1").toString()), Integer.parseInt(k.get("param2").toString()));
+					else
+						limit(Integer.parseInt(k.get("param1").toString()));
 				}
-				else if(findString.equals(Cinsert)){
+				else if(findString.equals(""+Cinsert)){
 					insert(k.get("param1").toString(), k.get("param2").toString(), k.get("param3").toString());
 				}
-				else if(findString.equals(Cdelete)){
+				else if(findString.equals(""+Cdelete)){
 					delete(k.get("param1").toString());
 				}
-				else if(findString.equals(Cmax)){
+				else if(findString.equals(""+Cmax)){
 					max(k.get("param1").toString());
 				}
-				else{
-					
+				else if(findString.equals(""+Cset)){
+					set(k.get("param1").toString());
 				}
 			}			
 		}
@@ -286,7 +342,7 @@ public class CoconutzDataBase extends CoconutzSetting{
 	}
 
 	private CoconutzDataBase select_max( String argu ){
-		String result = "SELECT MAX("+argu+") as" + argu +" " + query;
+		String result = "SELECT MAX("+argu+") " + query;
 		query.append(result);
 		return this;
 	}
@@ -296,7 +352,7 @@ public class CoconutzDataBase extends CoconutzSetting{
 		return this;
 	}
 	private CoconutzDataBase select_min( String argu ){
-		String result = "SELECT MIN("+argu+") as" + argu +" " + query;;
+		String result = "SELECT MIN("+argu+") " + query;;
 		query.append(result);
 		return this;
 	}
@@ -306,7 +362,7 @@ public class CoconutzDataBase extends CoconutzSetting{
 		return this;
 	}
 	private CoconutzDataBase select_sum( String argu ){
-		String result = "SELECT SUM("+argu+") as" + query;
+		String result = "SELECT SUM("+argu+") " + query;
 		query.append(result);
 		return this;
 	}
@@ -315,6 +371,17 @@ public class CoconutzDataBase extends CoconutzSetting{
 		query.append(result);
 		return this;
 	}
+	private CoconutzDataBase select_count( String argu ){
+		String result ="SELECT COUNT("+argu+") " + query; 
+		query.append(result);
+		return this;
+		
+	}
+	private CoconutzDataBase select_count( String argu, String as ){
+		String result ="SELECT COUNT("+argu+") as" + as +" " + query; 
+		query.append(result);
+		return this;		
+	}
 	/*--from--*/
 	private CoconutzDataBase from( String argu ){
 		String result = "FROM " + argu +" ";
@@ -322,13 +389,18 @@ public class CoconutzDataBase extends CoconutzSetting{
 		return this;
 	}
 	/*--join--*/
+	private CoconutzDataBase join( String argu ){
+		String result = "JOIN " + argu +" ";
+		query.append(result);
+		return this;
+	}	
 	private CoconutzDataBase join( String argu, String as ){
 		String result = "JOIN " + argu +" ON "+ as +" ";
 		query.append(result);
 		return this;
 	}
 	private CoconutzDataBase join( String argu, String as, String option ){
-		String result = option +"JOIN " + argu +" ON "+ as +" ";;
+		String result = option +" JOIN " + argu +" ON "+ as +" ";;
 		query.append(result);
 		return this;
 	}
@@ -461,22 +533,22 @@ public class CoconutzDataBase extends CoconutzSetting{
 		for( int i=0 ; i < argu.length ; i++ ){
 			if( i == argu.length-1 ){
 				if( option.equals("before") )
-					result +=  argu[i]+"LIKE " +"%"+value[i] +" ";
+					result +=  argu[i]+" LIKE '%"+value[i] +"' ";
 				else if( option.equals("after") )
-					result += argu[i]+"LIKE " + value[i]+"% ";
+					result += argu[i]+" LIKE '" + value[i]+"%' ";
 				else if( option.equals("both") )
-					result += argu[i]+"LIKE " +"%"+ value[i] + "% ";		
+					result += argu[i]+" LIKE '%"+ value[i] + "%' ";		
 				else
-					result += argu[i]+"LIKE " + value[i] +" ";
+					result += argu[i]+" LIKE '" + value[i] +"' ";
 			}else{
 				if( option.equals("before") )
-					result += argu[i]+"LIKE " +"%"+value[i] + " AND ";
+					result += argu[i]+" LIKE '%"+value[i] + "' AND ";
 				else if( option.equals("after") )
-					result += argu[i]+"LIKE " + value[i]+"%" + " AND ";
+					result += argu[i]+" LIKE '" + value[i]+"%'" + " AND ";
 				else if( option.equals("both") )
-					result += argu[i]+"LIKE " +"%"+ value[i] + "%" + " AND ";		
+					result += argu[i]+" LIKE '%"+ value[i] + "%'" + " AND ";		
 				else
-					result += argu[i]+"LIKE " + value[i] + " AND ";			
+					result += argu[i]+" LIKE '" + value[i] + "' AND ";			
 			}
 		}
 		query.append(result);
@@ -495,9 +567,9 @@ public class CoconutzDataBase extends CoconutzSetting{
 			result = "OR ";
 		for( int i=0 ; i < argu.length ; i++ ){
 			if( i != argu.length-1 )
-				result += argu[i] +" = ' LIKE %" + value[i] + "% ' OR ";
+				result += argu[i] +" = ' LIKE '%" + value[i] + "%' ' OR ";
 			else
-				result += argu[i] +" = ' LIKE %" + value[i] + "% ' ";				
+				result += argu[i] +" = ' LIKE '%" + value[i] + "%' ' ";				
 		}
 		query.append(result);
 		return this;
@@ -514,22 +586,22 @@ public class CoconutzDataBase extends CoconutzSetting{
 		for( int i=0 ; i < argu.length ; i++ ){
 			if( i == argu.length-1 ){
 				if( option.equals("before") )
-					result +=  argu[i]+"LIKE " +"%"+value[i] +" ";
+					result +=  argu[i]+"LIKE '%"+value[i] +"' ";
 				else if( option.equals("after") )
-					result += argu[i]+"LIKE " + value[i]+"% ";
+					result += argu[i]+"LIKE '" + value[i]+"%' ";
 				else if( option.equals("both") )
-					result += argu[i]+"LIKE " +"%"+ value[i] + "% ";		
+					result += argu[i]+"LIKE '%"+ value[i] + "%' ";		
 				else
-					result += argu[i]+"LIKE " + value[i] +" ";
+					result += argu[i]+"LIKE '" + value[i] +"' ";
 			}else{
 				if( option.equals("before") )
-					result += argu[i]+"LIKE " +"%"+value[i] + " OR ";
+					result += argu[i]+"LIKE '%"+value[i] + "' OR ";
 				else if( option.equals("after") )
-					result += argu[i]+"LIKE " + value[i]+"%" + " OR ";
+					result += argu[i]+"LIKE '" + value[i]+"%' OR ";
 				else if( option.equals("both") )
-					result += argu[i]+"LIKE " +"%"+ value[i] + "%" + " OR ";		
+					result += argu[i]+"LIKE '%"+ value[i] + "%' OR ";		
 				else
-					result += argu[i]+"LIKE " + value[i] + " OR ";			
+					result += argu[i]+"LIKE '" + value[i] + "' OR ";			
 			}
 		}
 		query.append(result);
@@ -546,9 +618,9 @@ public class CoconutzDataBase extends CoconutzSetting{
 			result = "AND ";
 		for( int i=0 ; i < argu.length ; i++ ){
 			if( i != argu.length-1 )
-				result += argu[i] +" = ' NOT LIKE %" + value[i] + "% ' AND ";
+				result += argu[i] +" NOT LIKE '%" + value[i] + "% ' AND ";
 			else
-				result += argu[i] +" = ' NOT LIKE %" + value[i] + "% ' ";				
+				result += argu[i] +" NOT LIKE '%" + value[i] + "% ' ";				
 		}
 		query.append(result);
 		return this;
@@ -565,22 +637,22 @@ public class CoconutzDataBase extends CoconutzSetting{
 		for( int i=0 ; i < argu.length ; i++ ){
 			if( i == argu.length-1 ){
 				if( option.equals("before") )
-					result +=  argu[i]+"NOT LIKE " +"%"+value[i] +" ";
+					result +=  argu[i]+" NOT LIKE '%"+value[i] +"' ";
 				else if( option.equals("after") )
-					result += argu[i]+"NOT LIKE " + value[i]+"% ";
+					result += argu[i]+" NOT LIKE '" + value[i]+"%' ";
 				else if( option.equals("both") )
-					result += argu[i]+"NOT LIKE " +"%"+ value[i] + "% ";		
+					result += argu[i]+" NOT LIKE '%"+ value[i] + "%' ";		
 				else
-					result += argu[i]+"NOT LIKE " + value[i] +" ";
+					result += argu[i]+" NOT LIKE '" + value[i] +"' ";
 			}else{
 				if( option.equals("before") )
-					result += argu[i]+"NOT LIKE " +"%"+value[i] + " AND ";
+					result += argu[i]+" NOT LIKE '%"+value[i] + "' AND ";
 				else if( option.equals("after") )
-					result += argu[i]+"NOT LIKE " + value[i]+"%" + " AND ";
+					result += argu[i]+" NOT LIKE '" + value[i]+"%' AND ";
 				else if( option.equals("both") )
-					result += argu[i]+"NOT LIKE " +"%"+ value[i] + "%" + " AND ";		
+					result += argu[i]+" NOT LIKE '%"+ value[i] + "%' AND ";		
 				else
-					result += argu[i]+"NOT LIKE " + value[i] + " AND ";			
+					result += argu[i]+" NOT LIKE '" + value[i] + "' AND ";			
 			}
 		}
 		query.append(result);
@@ -597,9 +669,9 @@ public class CoconutzDataBase extends CoconutzSetting{
 			result = "OR ";
 		for( int i=0 ; i < argu.length ; i++ ){
 			if( i != argu.length-1 )
-				result += argu[i] +" = ' NOT LIKE %" + value[i] + "% ' AND ";
+				result += argu[i] +"  NOT LIKE '%" + value[i] + "%' AND ";
 			else
-				result += argu[i] +" = ' NOT LIKE %" + value[i] + "% ' ";				
+				result += argu[i] +"  NOT LIKE '%" + value[i] + "%' ";				
 		}
 		query.append(result);
 		return this;
@@ -616,22 +688,22 @@ public class CoconutzDataBase extends CoconutzSetting{
 		for( int i=0 ; i < argu.length ; i++ ){
 			if( i == argu.length-1 ){
 				if( option.equals("before") )
-					result +=  argu[i]+"NOT LIKE " +"%"+value[i] +" ";
+					result +=  argu[i]+" NOT LIKE '%"+value[i] +"' ";
 				else if( option.equals("after") )
-					result += argu[i]+"NOT LIKE " + value[i]+"% ";
+					result += argu[i]+" NOT LIKE '" + value[i]+"%' ";
 				else if( option.equals("both") )
-					result += argu[i]+"NOT LIKE " +"%"+ value[i] + "% ";		
+					result += argu[i]+" NOT LIKE '%"+ value[i] + "%' ";		
 				else
-					result += argu[i]+"NOT LIKE " + value[i] +" ";
+					result += argu[i]+" NOT LIKE '" + value[i] +"' ";
 			}else{
 				if( option.equals("before") )
-					result += argu[i]+"NOT LIKE " +"%"+value[i] + " OR ";
+					result += argu[i]+" NOT LIKE '%"+value[i] + "' OR ";
 				else if( option.equals("after") )
-					result += argu[i]+"NOT LIKE " + value[i]+"%" + " OR ";
+					result += argu[i]+" NOT LIKE '" + value[i]+"%' OR ";
 				else if( option.equals("both") )
-					result += argu[i]+"NOT LIKE " +"%"+ value[i] + "%" + " OR ";		
+					result += argu[i]+" NOT LIKE '%"+ value[i] + "%' OR ";		
 				else
-					result += argu[i]+"NOT LIKE " + value[i] + " OR ";			
+					result += argu[i]+" NOT LIKE '" + value[i] + "' OR ";			
 			}
 		}
 		query.append(result);
@@ -771,7 +843,15 @@ public class CoconutzDataBase extends CoconutzSetting{
 	}
 
 	/**coconut ci - insert**/
-	private void set(){}
+	private void set( String argu ){
+		String result = "SET "+argu+" ";
+		query.append(result);
+	}
+	private void update( String table ){
+		String result = "UPDATE "+table+" ";
+		query.append(result);
+	}
+
 	/**coconut ci - insert batch**/	
 	private void insert_batch(String table, String argu, String value){
 		insert(table, argu, value);
@@ -786,22 +866,6 @@ public class CoconutzDataBase extends CoconutzSetting{
 	/**coconut ci - insert batch**/	
 	private void insert_batch(String table, String argu[], String value[][]){
 		insert(table, argu, value);
-		//+ escape
-	}
-	/**coconut ci - update**/		
-	private void update( String table,String argu, String value ){
-	}
-	/**coconut ci - update**/		
-	private void update( String table,String argu[], String value[] ){
-	}
-	/**coconut ci - update_batch**/		
-	private void update_batch( String table, String argu, String value ){
-		update(table, argu, value);
-		//+ escape
-	}
-	/**coconut ci - update_batch**/		
-	private void update_batch( String table, String argu[], String value[] ){
-		update(table, argu, value);
 		//+ escape
 	}
 	/**coconut ci - count_all**/

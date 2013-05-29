@@ -1,0 +1,144 @@
+package com.coconutz.HelperRef;
+
+import org.json.JSONException;
+
+import coconutz.ForParser.CoconutzAjax;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzDataBase;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+/*********************************************************************************************
+* @brief TABLE을 이용하여 간단하게 테이블을 생성할 수 있다.
+* @file  CoconutzTable.java
+* @author  CHOIUNGYEOP
+* @date  2013. 5.
+*********************************************************************************************/
+public class CoconutzTable extends CoconutzAjax{
+	private CoconutzCLI cli;
+	private volatile static CoconutzTable instance = null;
+
+	/*******************************************************************************************************
+	 * @brief cli를 ㅅ
+	 * @method CoconutzTable
+	 * @file CoconutzTable.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public CoconutzTable(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_Class/HTMLTable");
+	}	
+	/*******************************************************************************************************
+	 * @brief 숫자를 등록하면 숫자를 단위로 바꾸어 반환한다.
+	 * @method getInstance
+	 * @file CoconutzTable.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public static CoconutzTable getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzDate.class){
+				if (instance == null) {
+					instance = new CoconutzTable();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+	/*******************************************************************************************************
+	 * @brief 숫자를 등록하면 숫자를 단위로 바꾸어 반환한다.
+	 * @method CoconutzPagination
+	 * @file CoconutzTable.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getTest(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }	
+		return new Coconut(cli.console("generateTest", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief 숫자를 등록하면 숫자를 단위로 바꾸어 반환한다.
+	 * @method getTableFromDB
+	 * @file CoconutzTable.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getTableFromDB(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }		
+		try {
+			return new Coconut(cli.console("generateFromDB", new CoconutParameter(new CoconutzDataBase(parameter.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(cli.console("generateFromDB", parameter ));		
+		}
+	}	
+	/*******************************************************************************************************
+	 * @brief 값을 DATABASE에 넣을 수 있는 insert를 제공한다.
+	 * @method Insert
+	 * @file CoconutzTable.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut Insert(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }
+		try {
+			return new Coconut(cli.console("insertTable", new CoconutParameter(new CoconutzDataBase(parameter.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(cli.console("insertTable", parameter));		
+		}
+	}
+	/*******************************************************************************************************
+	 * @brief 숫자를 등록하면 숫자를 단위로 바꾸어 반환한다.
+	 * @method InsertFile
+	 * @file CoconutzTable.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut InsertFile(CoconutParameter parameter){
+		return new Coconut(cli.console("", parameter));				
+	}
+	/*******************************************************************************************************
+	 * @brief 제거할 수 있는 쿼리를 생성한다.
+	 * @method Delete
+	 * @file CoconutzTable.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut Delete(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }
+		try {
+			return new Coconut(cli.console("deleteTable", new CoconutParameter(new CoconutzDataBase(parameter.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(cli.console("deleteTable", parameter));		
+		}
+	}
+	/*******************************************************************************************************
+	 * @brief 검색할 수 있는 쿼리를 생성한다.
+	 * @method View
+	 * @file CoconutzTable.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut View(CoconutParameter parameter){
+		if (G.DEBUG) { G.debugPrint(parameter.toString()); }
+		try {
+			return new Coconut(cli.console("viewTable", new CoconutParameter(new CoconutzDataBase(parameter.getJsonArray()).getJson()),""));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new Coconut(cli.console("viewTable", parameter));		
+		}
+	}
+}

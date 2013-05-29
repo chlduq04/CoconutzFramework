@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import coconutz.ForParser.CoconutzSetting;
+import com.coconutz.Service.CoconutzSetting;
+
+
 
 public class CoconutzCLI extends CoconutzSetting{
 	private static String OS;
@@ -18,7 +21,7 @@ public class CoconutzCLI extends CoconutzSetting{
 	private String ProjPath = "";
 	private String coconutz_prefix = "";
 	private String coconutz_php="";
-	public String dbdriver = "dbdriver://"+username+":"+password+"@"+hostname+"/"+database+"?char_set=utf8&dbcollat=utf8_general_ci&cache_on=false&cachedir=/path/to/cache" ;
+	public String dbdriver = "mysql://"+username+":"+password+"@"+hostname+"/"+database+"?char_set=utf8&dbcollat=utf8_general_ci&cache_on=false&cachedir=/path/to/cache" ;
 
 	public CoconutzCLI(String projpath, String prefix, String phpfile){
 		ProjPath = projpath;
@@ -36,6 +39,10 @@ public class CoconutzCLI extends CoconutzSetting{
 		} else {
 			os_type = 4;
 		}
+	}
+
+	int getOSType(){
+		return os_type;
 	}
 	
 	private String encoding(String argu){
@@ -60,7 +67,53 @@ public class CoconutzCLI extends CoconutzSetting{
 		return (OS.indexOf("sunos") >= 0);
 	}
 
-	public Object console( String type, String function, CoconutParameter param ){		
+	public String console(String cmd){		
+		Runtime rt = Runtime.getRuntime();
+		Process p;
+		String execStr = null;
+		String result = "";
+		try{
+			switch(os_type){
+			case 0:
+				//execStr = "cmd /c cd/&cd " + cmd;
+				execStr = cmd;
+				break;
+			case 1:
+				execStr = cmd;
+				break;
+			case 2:
+				execStr = cmd;
+				break;
+			default:
+				execStr = cmd;
+				break;
+			}
+			if (G.DEBUG) { G.debugPrint(execStr); }
+			p = rt.exec(execStr);
+			InputStream in = p.getInputStream();	
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String line;
+			while ((line = br.readLine()) != null) {
+				result+=line + "\n";
+			}
+			InputStream es = p.getErrorStream();	
+			br = new BufferedReader( new InputStreamReader(es) );
+			while ((line = br.readLine()) != null) {
+				result+=line + "\n";
+			}
+			in.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			if (G.DEBUG) { G.debugPrint(e.toString()); }
+		}
+
+		if (G.DEBUG) { G.debugPrint(result); }
+		return result;
+
+	}
+	
+	public JSONObject console( String function, CoconutParameter param ){		
 		Runtime rt = Runtime.getRuntime();
 		Process p;
 		String execStr = null;
@@ -95,25 +148,20 @@ public class CoconutzCLI extends CoconutzSetting{
 			e.printStackTrace();
 		}
 
+		//if (G.DEBUG) { G.debugPrint("cli return : " + result); }
 		try{
-			if( type == "boolean" ){
-				return Boolean.parseBoolean(result.trim());
-			}else if( type == "String" ){
-				return result;
-			}else if( type == "int" ){
-				return Integer.parseInt(result.trim());
-			}else if( type == "arraylist" ){
-				return parser(result);
-			}else if( type == "jsonobject" ){
-				return new JSONObject(result);
-			}else{
-				return "";			
-			}
+			return new JSONObject(result);
 		}catch(Exception e){
-			return 0;
+			try {
+				return new JSONObject("{\"error\":\"json fail\"}");
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println(e.toString() + "\nCoconutzCLI Error. json fail");
+			return null;
 		}
 	}
-	public Object console( String type, String function, String param ){		
+	public Object input_json_console( String type, String function, String param ){		
 		Runtime rt = Runtime.getRuntime();
 		Process p;
 		String execStr = null;
@@ -166,7 +214,7 @@ public class CoconutzCLI extends CoconutzSetting{
 			return 0;
 		}
 	}
-	public Object console( String type, String function, CoconutParameter param1, String prarm2 ){		
+	public JSONObject console( String function, CoconutParameter param1, String prarm2 ){		
 		Runtime rt = Runtime.getRuntime();
 		Process p;
 		String execStr = null;
@@ -202,24 +250,12 @@ public class CoconutzCLI extends CoconutzSetting{
 		}
 
 		try{
-			if( type == "boolean" ){
-				return Boolean.parseBoolean(result.trim());
-			}else if( type == "String" ){
-				return result;
-			}else if( type == "int" ){
-				return Integer.parseInt(result.trim());
-			}else if( type == "arraylist" ){
-				return parser(result);
-			}else if( type == "jsonobject" ){
 				return new JSONObject(result);
-			}else{
-				return "";			
-			}
 		}catch(Exception e){
-			return 0;
+			return null;
 		}
 	}
-	public Object console( String type, String function, String param1, String prarm2 ){		
+	public JSONObject console( String type, String function, String param1, String prarm2 ){		
 		Runtime rt = Runtime.getRuntime();
 		Process p;
 		String execStr = null;
@@ -255,23 +291,38 @@ public class CoconutzCLI extends CoconutzSetting{
 		}
 
 		try{
-			if( type == "boolean" ){
-				return Boolean.parseBoolean(result.trim());
-			}else if( type == "String" ){
-				return result;
-			}else if( type == "int" ){
-				return Integer.parseInt(result.trim());
-			}else if( type == "arraylist" ){
-				return parser(result);
-			}else if( type == "jsonobject" ){
 				return new JSONObject(result);
-			}else{
-				return "";			
-			}
 		}catch(Exception e){
-			return 0;
+			return null;
 		}
 	}
+
+	public void consoleLinux(String path, String[] cmd) {	
+		Runtime rt = Runtime.getRuntime();
+		Process p;
+		try{
+			if (G.DEBUG) { for (int i=0; i<cmd.length; i++) G.debugPrint(cmd[i]); }
+			p = rt.exec(cmd);
+			InputStream in = p.getInputStream();	
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String line;
+			while ((line = br.readLine()) != null) {
+				System.out.println(line);
+			}
+			InputStream es = p.getErrorStream();	
+			br = new BufferedReader( new InputStreamReader(es) );
+			while ((line = br.readLine()) != null) {
+				System.out.println(line);
+			}
+			in.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			if (G.DEBUG) { G.debugPrint(e.toString()); }
+		}
+
+	}
+	
 	private ArrayList<HashMap<String, String>> parser(String argu){
 		String first_argu="";
 		boolean check = false;

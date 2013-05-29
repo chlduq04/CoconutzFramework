@@ -1,0 +1,14 @@
+package com.newService;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.HelperRef.CoconutzTesthelper;
+
+public class mytest7 extends CoconutzTesthelper{
+	public mytest7(){
+		
+	}
+	public Coconut _testInsert(CoconutParameter parameter){
+		return super.INSERT_TABLE(parameter);
+	}
+}

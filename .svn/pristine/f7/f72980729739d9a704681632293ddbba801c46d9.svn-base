@@ -1,0 +1,63 @@
+package com.coconutz.HelperRef;
+
+import coconutz.ForParser.CoconutzAjax;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzQuery;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+/*********************************************************************************************
+* @brief DirectoryMap을 만든다.
+* @file  CoconutzDirectory.java
+* @author  KWONEUNJI
+* @date  2013. 5.
+*********************************************************************************************/
+public class CoconutzDirectory extends CoconutzAjax{
+	private CoconutzCLI cli;
+	private volatile static CoconutzDirectory instance = null;
+	/*******************************************************************************************************
+	 * @brief CoconutzDirectory의 생성자
+	 * @method CoconutzDirectory
+	 * @file CoconutzDirectory.java
+	 * @author KWONEUNJI
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public CoconutzDirectory(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/directory");
+	}
+	/*******************************************************************************************************
+	 * @brief instance을 얻어오고 없으면 생성한다.
+	 * @method getInstance
+	 * @file CoconutzDirectory.java
+	 * @author KWONEUNJI
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public static CoconutzDirectory getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzDirectory.class){
+				if (instance == null) {
+					instance = new CoconutzDirectory();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+			
+		}
+		return instance;
+	}
+	/*******************************************************************************************************
+	 * @brief directory를 array로 바꾸어 준다.
+	 * @method directoryMap
+	 * @file CoconutzDirectory.java
+	 * @author KWONEUNJI
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut directoryMap(CoconutParameter cp){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/directory/directoryMap\t"+ cp.toString()); }
+		return new Coconut(cli.console("directoryMap", cp));
+	}
+}

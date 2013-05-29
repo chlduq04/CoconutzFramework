@@ -1,0 +1,76 @@
+package com.coconutz.HelperRef;
+
+import coconutz.ForParser.CoconutzAjax;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzQuery;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+/*********************************************************************************************
+* @brief 웹 페이지에 넣을 수 있는 코드를 얻을 수 있다.
+* @file  CoconutzTypography.java
+* @author  CHOIUNGYEOP
+* @date  2013. 5.
+*********************************************************************************************/
+public class CoconutzTypography extends CoconutzAjax{
+	private CoconutzCLI cli;
+	private volatile static CoconutzTypography instance = null;
+	/*******************************************************************************************************
+	 * @brief CoconutzTypography의 생성자
+	 * @method CoconutzTypography
+	 * @file CoconutzTypography.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public CoconutzTypography(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/typography");
+	}
+	/*******************************************************************************************************
+	 * @brief instance를 반환한다. 없으면 생성하여 반환한다.
+	 * @method getInstance
+	 * @file CoconutzTypography.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public static CoconutzTypography getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzTypography.class){
+				if (instance == null) {
+					instance = new CoconutzTypography();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+			
+		}
+		return instance;
+	}
+	/*******************************************************************************************************
+	 * @brief 웹 페이지에 사용할 수 있는 tag로 만들 수 있다.
+	 * @method autoTypography
+	 * @file CoconutzTypography.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut autoTypography(CoconutParameter cp){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/captcha/autoTypography\t"+ cp.toString()); }
+		return new Coconut(cli.console("autoTypography", cp));
+	}
+	/*******************************************************************************************************
+	 * @brief 웹 페이지에 사용할 수 있는 tag로 만들 수 있다.
+	 * @method nl2brExceptPre
+	 * @file CoconutzTypography.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut nl2brExceptPre(CoconutParameter cp){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/captcha/nl2brExceptPre\t"+ cp.toString()); }		
+		return new Coconut(cli.console("nl2brExceptPre", cp));
+	}
+
+}

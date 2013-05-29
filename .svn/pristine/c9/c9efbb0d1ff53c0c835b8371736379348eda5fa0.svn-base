@@ -1,0 +1,195 @@
+package com.coconutz.HelperRef;
+
+import org.json.JSONObject;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+/*********************************************************************************************
+* @brief  Captcha를 만들 수 있는 함수를 제공한다.
+* @file  CoconutzDate.java
+* @author  CHOIUNGYEOP
+* @date  2013. 5.
+*********************************************************************************************/
+public class CoconutzDate {
+	private CoconutzCLI cli;
+	private volatile static CoconutzDate instance = null;
+
+	/*******************************************************************************************************
+	 * @brief CoconutzDate의 생성자
+	 * @method CoconutzDate
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public CoconutzDate(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/date");
+	}
+	/*******************************************************************************************************
+	 * @brief instance를 얻어온다. 만약 없다면 생성한다.
+	 * @method getInstance
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public static CoconutzDate getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzDate.class){
+				if (instance == null) {
+					instance = new CoconutzDate();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+	
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getNow
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getNow(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getNow\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getNow", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getMdate
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getMdate(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getMdate\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getMdate", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getStandardDate
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getStandardDate(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getStandardDate\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getStandardDate", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getLocalToGMT
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getLocalToGMT(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getLocalToGMT\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getLocalToGMT", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getGMTToLocal
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getGMTToLocal(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getGMTToLocal\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getGMTToLocal", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getMysqlToUnix
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getMysqlToUnix(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getMysqlToUnix\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getMysqlToUnix", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getUnixToHuman
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getUnixToHuman(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getUnixToHuman\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getUnixToHuman", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getHumanToUnix
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getHumanToUnix(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getHumanToUnix\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getHumanToUnix", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getTimespan
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getTimespan(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimespan\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getTimespan", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getDaysInMonth
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getDaysInMonth(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getDaysInMonth\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getDaysInMonth", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getTimezones
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getTimezones(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimezones\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getTimezones", parameter));
+	}
+	/*******************************************************************************************************
+	 * @brief YEAR의 기능을 활성화 한다.
+	 * @method getTimezoneMenu
+	 * @file CoconutzDate.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public Coconut getTimezoneMenu(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimezoneMenu\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getTimezoneMenu", parameter));
+	}
+}

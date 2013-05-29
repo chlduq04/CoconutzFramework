@@ -1,0 +1,92 @@
+package com.coconutz.HelperRef;
+
+import org.json.JSONObject;
+
+import com.coconutz.Coconut;
+import com.coconutz.CoconutParameter;
+import com.coconutz.CoconutzCLI;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.G;
+
+public class CoconutzDate {
+	private CoconutzCLI cli;
+	private volatile static CoconutzDate instance = null;
+
+	
+	public CoconutzDate(){
+		cli = new CoconutzCLI("../../../index.php", "", "/coconutzAPI_helper/date");
+	}
+	
+	public static CoconutzDate getInstance() {
+		if (instance == null) {
+			synchronized(CoconutzDate.class){
+				if (instance == null) {
+					instance = new CoconutzDate();
+					CoconutzRunnableClass.addRunnableClass(getInstance());
+				}
+			}
+		}
+		return instance;
+	}
+	
+
+	public Coconut getNow(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getNow\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getNow", parameter));
+	}
+
+	public Coconut getMdate(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getMdate\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getMdate", parameter));
+	}
+
+	public Coconut getStandardDate(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getStandardDate\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getStandardDate", parameter));
+	}
+
+	public Coconut getLocalToGMT(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getLocalToGMT\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getLocalToGMT", parameter));
+	}
+
+	public Coconut getGMTToLocal(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getGMTToLocal\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getGMTToLocal", parameter));
+	}
+
+	public Coconut getMysqlToUnix(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getMysqlToUnix\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getMysqlToUnix", parameter));
+	}
+
+	public Coconut getUnixToHuman(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getUnixToHuman\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getUnixToHuman", parameter));
+	}
+
+	public Coconut getHumanToUnix(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getHumanToUnix\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getHumanToUnix", parameter));
+	}
+
+	public Coconut getTimespan(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimespan\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getTimespan", parameter));
+	}
+	
+	public Coconut getDaysInMonth(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getDaysInMonth\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getDaysInMonth", parameter));
+	}
+
+	public Coconut getTimezones(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimezones\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getTimezones", parameter));
+	}
+
+	public Coconut getTimezoneMenu(CoconutParameter parameter){ 
+		if (G.DEBUG) { G.debugPrint("/coconutzAPI_helper/date/getTimezoneMenu\t"+ parameter.toString()); }
+		return new Coconut(cli.console("getTimezoneMenu", parameter));
+	}
+}

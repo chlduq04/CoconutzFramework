@@ -1,0 +1,48 @@
+package com.newService;
+
+import com.coconutz.CoconutzFormBase;
+import com.coconutz.CoconutzQuery;
+import com.coconutz.CoconutzRunnableClass;
+import com.coconutz.DriverRef.DB.CoconutzDB;
+import com.coconutz.HelperRef.CoconutzCaptcha;
+import com.coconutz.HelperRef.CoconutzDate;
+import com.coconutz.HelperRef.CoconutzDirectory;
+import com.coconutz.HelperRef.CoconutzEmail;
+import com.coconutz.HelperRef.CoconutzNumber;
+import com.coconutz.HelperRef.CoconutzTable;
+import com.coconutz.HelperRef.CoconutzTypography;
+import com.coconutz.HelperRef.CoconutzXml;
+
+public class MyRunnableClass extends CoconutzRunnableClass {
+	
+	public MyRunnableClass() {
+		defaultClass();
+		userClass();
+	}
+
+	private void defaultClass() {
+		
+		CoconutzCaptcha captcha = CoconutzCaptcha.getInstance();
+		CoconutzDate date= CoconutzDate.getInstance();	
+		CoconutzNumber number = CoconutzNumber.getInstance();
+		CoconutzXml xml = CoconutzXml.getInstance();
+		CoconutzTypography typography = CoconutzTypography.getInstance();
+		CoconutzDirectory directory = CoconutzDirectory.getInstance();
+		CoconutzEmail email = CoconutzEmail.getInstance();
+	}
+	
+	private void userClass() {
+		addRunnableClass( new Mytest() );
+		addRunnableClass( new mytest4() );
+		addRunnableClass( new mytest5() );
+		addRunnableClass( new mytest9() );
+//		addRunnableClass( new FormTest() );
+//		addRunnableClass( new mytest8() );
+//		addRunnableClass( new mytest9() );
+//		addRunnableClass( new mytest6() );
+//		addRunnableClass( new mytest7() );
+//		addRunnableClass( new mytest3() );		
+//		addRunnableClass(new Object1);
+//		addRunnableClass(new Object2);
+	}
+}

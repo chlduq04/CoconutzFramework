@@ -1,0 +1,377 @@
+package coconutz.ForParser;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import com.newService.CoconutzSetting;
+
+
+/*********************************************************************************************
+* @brief  Ajax를 만들어 준다.
+* @file  CoconutzAjax.java
+* @author  CHOIUNGYEOP
+* @date  2013. 5.
+*********************************************************************************************/
+public class CoconutzAjax extends CoconutzSetting{
+	private String url = super.url;
+	private String username = super.usernames;
+	private CoconutzMakeAjax ajax = new CoconutzMakeAjax();
+
+	/*******************************************************************************************************
+	 * @brief CoconutzMakeAjax.java를 이용하여 만들어진 ajax를 이용하여 html을 만들어 준다.
+	 * @method CoconutAjax
+	 * @file CoconutzAjax.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	public boolean CoconutAjax( String filename, CoconutzMakeAjax aj ){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(filename+".html"));
+			out.write(aj.popAjax()); 
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}		
+	}
+	public boolean CoconutJS( String filename, CoconutzMakeAjax aj ){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter("js_"+filename+".js"));
+			out.write(aj.popAjax()); 
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}		
+	}
+	public boolean CoconutPolling( String filename, CoconutzMakeAjax aj ){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter("poll_"+filename+".js"));
+			out.write(aj.popAjax()); 
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}		
+	}
+	/*******************************************************************************************************
+	 * @brief param 파라미터를 직접 작성하여 ajax를 만들 수 있다.
+	 * @method getJQuery
+	 * @file CoconutzAjax.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	protected boolean getJQuery( String jsname, String classname, String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			ajax.SCRIPT_INCLUDE("http://code.jquery.com/jquery-1.9.1.min.js").SCRIPT("'POST'","'"+url+"'", false, "'json'", "\'{\"user\" : \""+username+"\", \"class\" : \""+classname+"\", \"function\" : \""+jsname+"\", \"parameter\" : "+param+" }\'", "jdata", "document.getElementById(name).innerHTML = JSON.parse(jdata.data).value;", "xhr,status,e", "alert('Error');","<div id = \"a\"></div>");
+			out.write(ajax.popAjax()); 
+			out.newLine();
+			out.close();
+			getJs(jsname, classname, param);
+			getPoll(jsname, classname, param);
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	protected boolean getJs( String jsname, String classname, String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter("js_"+classname+"_"+jsname+".js"));
+			ajax.JS("'POST'","'"+url+"'", false, "'json'", "\'{\"user\" : \""+username+"\", \"class\" : \""+classname+"\", \"function\" : \""+jsname+"\", \"parameter\" : "+param+" }\'", "jdata", "document.getElementById(name).innerHTML = JSON.parse(jdata.data).value;", "xhr,status,e", "alert('Error');","");
+			out.write(ajax.popAjax()); 
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	protected boolean getPoll( String jsname, String classname, String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter("poll_"+classname+"_"+jsname+".js"));
+			ajax.POLLING("'POST'","'"+url+"'", false, "'json'", "\'{\"user\" : \""+username+"\", \"class\" : \""+classname+"\", \"function\" : \""+jsname+"\", \"parameter\" : "+param+" }\'", "jdata", "document.getElementById(name).innerHTML = JSON.parse(jdata.data).value;", "xhr,status,e", "alert('Error');","");
+			out.write(ajax.popAjax()); 
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	/*******************************************************************************************************
+	 * @brief tags 파라미터를 이용하여 일반 html을, param 파라미터를 직접 작성하여 ajax를 만들 수 있다.
+	 * @method getJQuery
+	 * @file CoconutzAjax.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	protected boolean getJQuery(String tags,String jsname, String classname, String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			String html = tags + ajax.SCRIPT_INCLUDE("http://code.jquery.com/jquery-1.9.1.min.js").SCRIPT("'POST'", "'"+url+"'", false, "'json'", "\'{\"user\" : \""+username+"\", \"class\" : \""+classname+"\", \"function\" : \""+jsname+"\", \"parameter\" : "+param+" }\'", "jdata", "document.getElementById(name).innerHTML = JSON.parse(jdata.data).value;", "xhr,status,e", "alert('Error');","<div id = \"a\"></div>");
+			out.write(html); 
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	/*******************************************************************************************************
+	 * @brief param 파라미터를 직접 작성하여 polling ajax를 만들 수 있다.
+	 * @method getJQuery
+	 * @file CoconutzAjax.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	protected boolean getPolling(String jsname, String classname,String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			ajax.SCRIPT_INCLUDE("http://code.jquery.com/jquery-1.9.1.min.js").SCRIPT_POLLING("'POST'","'"+url+"'", false, "'json'", "\'{\"user\" : \""+username+"\", \"class\" : \""+classname+"\", \"function\" : \""+jsname+"\", \"parameter\" : "+param+" }\'", "jdata", "document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;", "xhr,status,e", "alert('Error');", "50000", "<div id = \"a\"></div>");
+			out.write(ajax.popAjax()); 
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+
+	/*******************************************************************************************************
+	 * @brief tags 파라미터를 이용하여 일반 html을, param 파라미터를 직접 작성하여 ajax를 만들 수 있다.
+	 * @method getJQuery
+	 * @file CoconutzAjax.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	protected boolean getPolling(String tags, String jsname,String classname,String param){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			String html = tags + ajax.SCRIPT_INCLUDE("http://code.jquery.com/jquery-1.9.1.min.js").SCRIPT_POLLING("'POST'", "'"+url+"'", false, "'json'", "\'{\"user\" : \""+username+"\", \"class\" : \""+classname+"\", \"function\" : \""+jsname+"\", \"parameter\" : "+param+" }\'", "jdata", "document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;", "xhr,status,e", "alert('Error');", "50000", "<div id = \"a\"></div>");
+			out.write(html); 
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+
+	/*******************************************************************************************************
+	 * @brief tags 파라미터를 이용하여 일반 html을, param 파라미터를 직접 작성하여 json 형태의 ajax를 만들 수 있다.
+	 * @method getJsonJQuery
+	 * @file CoconutzAjax.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	protected boolean getJsonJQuery(String tags,String jsname, String classname,String tablename ){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html")); 
+			StringBuffer s = new StringBuffer("<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>\r\n")
+			.append(tags+"\r\n")
+			.append("<script>\r\n")
+			.append("$.fn.serializeObject = function(){\r\n")
+			.append("  var o = {};\r\n")
+			.append("	o[\"param1\"] = \""+tablename+"\";\r\n")
+			.append("	o[\"param2\"] = \"\";\r\n")
+			.append("	o[\"param3\"] = \"\";\r\n")
+			.append("	o[\"function\"] = \"insert\";\r\n")
+			.append("	var a = this.serializeArray();\r\n")
+			.append("   $.each( a, function(){\r\n")
+			.append("		if(o[\"param2\"]===\"\"){\r\n")
+			.append("			o[\"param2\"] += this.name;\r\n")
+			.append("		}else{		\r\n")
+			.append("			o[\"param2\"] += \", \"+this.name;\r\n")
+			.append("		}\r\n")
+			.append("		if(o[\"param3\"]===\"\"){\r\n")
+			.append("			o[\"param3\"] += this.value;\r\n")
+			.append("		}else{\r\n")
+			.append("			o[\"param3\"] += \", \"+this.value;\r\n")
+			.append("		}\r\n")
+			.append("   });\r\n")
+			.append("   return o;\r\n")
+			.append("};\r\n")
+			.append("$(function(){\r\n")
+			.append("	$(\"#submit\").click(function(){\r\n")
+			.append("		$.ajax({\r\n")
+			.append("			type : \"POST\",\r\n")
+			.append("			url:'http://211.189.127.244:8000/echo',               //데이터를 요청할 페이지\r\n")
+			.append("			cache : false,\r\n")
+			.append("			dataType:\"json\",\r\n")
+			.append("			data:'{ \"user\" : \"")
+			.append(username)
+			.append("\", \"class\" : \"")
+			.append(classname)
+			.append("\", \"function\" : \"")
+			.append(jsname)
+			.append("\", \"parameter\" : ['+ JSON.stringify($('#frmData').serializeObject()) +']}',\r\n")
+			.append("			error:function(xhr,status,e){       //에러 발생시 처리함수\r\n")
+			.append("				alert('Error');\r\n")
+			.append("			},\r\n")
+			.append("			success: function(jdata){           //성공시 처리 함수, 인수는 위에서 data를 사용한 경우 \r\n")
+			.append("				console.log(jdata);\r\n")
+			.append("				document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;\r\n")
+			.append("			}\r\n")
+			.append("		});\r\n")
+			.append("	});\r\n")			
+			.append("});\r\n")
+			.append("</script>\r\n")
+			.append("<div id = \"a\">\r\n")
+			.append("</div>\r\n");
+
+			
+			out.write(s.toString());
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+	/*******************************************************************************************************
+	 * @brief tags 파라미터를 이용하여 일반 html을, param 파라미터를 직접 작성하여 json 형태의 polling ajax를 만들 수 있다.
+	 * @method getJsonPolling
+	 * @file CoconutzAjax.java
+	 * @author CHOIUNGYEOP
+	 * @date  2013. 5.
+	 * @param 
+	 *******************************************************************************************************/
+	protected boolean getJsonPolling(String tags, String jsname,String classname,String tablename ){
+		try {
+			/*------------------- output -------------------*/
+			BufferedWriter out = new BufferedWriter(new FileWriter(classname+"_"+jsname+".html"));
+			StringBuffer s = new StringBuffer("<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>\r\n")
+			.append(tags)
+			.append("<script>\r\n")
+			.append("$.fn.serializeObject = function(){\r\n")
+			.append("  var o = {};\r\n")
+			.append("	o[\"param1\"] = \""+tablename+"\";\r\n")
+			.append("	o[\"param2\"] = \"\";\r\n")
+			.append("	o[\"param3\"] = \"\";\r\n")
+			.append("	o[\"function\"] = \"insert\";\r\n")
+			.append("	var a = this.serializeArray();\r\n")
+			.append("   $.each( a, function(){\r\n")
+			.append("		if(o[\"param2\"]===\"\"){\r\n")
+			.append("			o[\"param2\"] += this.name;\r\n")
+			.append("		}else{		\r\n")
+			.append("			o[\"param2\"] += \", \"+this.name;\r\n")
+			.append("		}\r\n")
+			.append("		if(o[\"param3\"]===\"\"){\r\n")
+			.append("			o[\"param3\"] += this.value;\r\n")
+			.append("		}else{\r\n")
+			.append("			o[\"param3\"] += \", \"+this.value;\r\n")
+			.append("		}\r\n")
+			.append("   });\r\n")
+			.append("   return o;\r\n")
+			.append("};\r\n")
+			.append("$(function(){\r\n")
+			.append("	$(\"#submit\").click(function poll(){\r\n")
+			.append("		$.ajax({\r\n")
+			.append("			type : \"POST\",\r\n")
+			.append("			url:'http://211.189.127.244:8000/echo',               //데이터를 요청할 페이지\r\n")
+			.append("			cache : false,\r\n")
+			.append("			dataType:\"json\",\r\n")
+			.append("			data:'{ \"user\" : \"")
+			.append(username)
+			.append("\", \"class\" : \"")
+			.append(classname)
+			.append("\", \"function\" : \"")
+			.append(jsname)
+			.append("\", \"parameter\" : ['+ JSON.stringify($('#frmData').serializeObject()) +']}',\r\n")
+			.append("			error:function(xhr,status,e){       //에러 발생시 처리함수\r\n")
+			.append("				alert('Error');\r\n")
+			.append("			},\r\n\r\n")
+			.append("			success: function(jdata){           //성공시 처리 함수, 인수는 위에서 data를 사용한 경우 \r\n")
+			.append("				console.log(jdata);\r\n")
+			.append("				document.getElementById(\"a\").innerHTML = JSON.parse(jdata.data).value;\r\n")
+			.append("			},\r\n")
+			.append("			complete : poll,")
+			.append("			timeout : 70000")
+			.append("		});\r\n")
+			.append("	});\r\n")
+			.append("});\r\n")
+			.append("</script>\r\n")
+			.append("<div id = \"a\">\r\n")
+			.append("</div>\r\n");
+			//에러 발생시 처리함수
+			out.write(s.toString());
+			out.newLine();
+			out.close();
+			return true;
+		} catch (IOException e) {
+			System.err.println(e);
+			System.exit(1);
+			return false;
+		}
+	}
+/*
+	protected boolean startParser(String js_name, String class_name, String param){
+		if( getJQuery(js_name, class_name ,param) )
+			return true;
+		else
+			return false;
+	}
+
+	protected boolean startParserdiv(String js_name,String class_name,String param,String tags){
+		if( getJQuery(tags,js_name, class_name ,param) )
+			return true;
+		else
+			return false;
+	}
+
+	protected boolean startInput(String js_name, String class_name,String tags){
+		if( getJQuery(tags,js_name, class_name) )
+			return true;
+		else
+			return false;
+	}
+
+	protected boolean startInput(String js_name, String class_name,String tags,String tablename){
+		if( getJsonJQuery(tags,js_name, class_name,tablename) )
+			return true;
+		else
+			return false;
+	}
+	
+	*/
+}
